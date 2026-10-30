@@ -31,40 +31,30 @@
 
   /* === 3D МОЛОЧНЫЙ ТЕКСТ С ПЕРЕЛИВАЮЩЕЙСЯ ЗОЛОТОЙ ОКАНТОВКОЙ === */
   .lux-text {
-    color: #f5e6d3;
     font-family: 'Playfair Display', 'Didot', 'Bodoni MT', serif;
-    /* 3D объём */
-    text-shadow:
-      0 1px 0 #e8d5b7,
-      0 2px 0 #d4b896,
-      0 3px 0 #b89968,
-      0 4px 6px rgba(0,0,0,0.6),
-      0 0 20px rgba(212, 175, 55, 0.3);
-    /* Переливающаяся золотая окантовка */
-    -webkit-text-stroke: 1px transparent;
-    position: relative;
-  }
-
-  .lux-text::before {
-    content: attr(data-text);
-    position: absolute;
-    left: 0; top: 0;
+    color: transparent;
     background: linear-gradient(
       90deg,
       #D4AF37 0%,
-      #FFF8DC 25%,
-      #FFD700 50%,
-      #FFF8DC 75%,
-      #D4AF37 100%
+      #FFF8DC 20%,
+      #FFD700 40%,
+      #FFF8DC 60%,
+      #D4AF37 80%,
+      #FFF8DC 100%
     );
     background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 0;
-    animation: shimmer 3s linear infinite;
-    z-index: 1;
-    pointer-events: none;
+    animation: shimmer 4s linear infinite;
+    /* 3D объём через тени */
+    text-shadow:
+      0 1px 0 #e8d5b7,
+      0 2px 0 #d4b896,
+      0 3px 0 #b89968,
+      0 4px 8px rgba(0,0,0,0.8);
+    /* Золотая окантовка */
+    -webkit-text-stroke: 0.5px #D4AF37;
   }
 
   @keyframes shimmer {
@@ -281,11 +271,11 @@
   }
 
   .lips {
-    width: 90px;
-    height: 55px;
+    width: 100px;
+    height: 60px;
     position: relative;
-    animation: kiss 2.8s ease-in-out infinite;
-    filter: drop-shadow(0 4px 12px rgba(225, 6, 0, 0.5));
+    animation: kiss 2.5s ease-in-out infinite;
+    filter: drop-shadow(0 4px 15px rgba(225, 6, 0, 0.6));
   }
 
   .lips svg {
@@ -295,21 +285,18 @@
 
   @keyframes kiss {
     0%, 100% {
-      transform: scale(1) rotate(0deg);
+      transform: scale(1);
     }
-    15% {
-      transform: scale(1.08) rotate(-2deg);
+    20% {
+      transform: scale(1.15);
     }
-    30% {
-      transform: scale(0.82) rotate(0deg);
-    }
-    45% {
-      transform: scale(1) rotate(0deg);
+    40% {
+      transform: scale(0.75);
     }
     60% {
       transform: scale(1.05);
     }
-    75% {
+    80% {
       transform: scale(0.95);
     }
   }
@@ -322,32 +309,32 @@
     left: 20%;
     width: 25%;
     height: 20%;
-    background: radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(255,255,255,0.7) 0%, transparent 70%);
     border-radius: 50%;
-    animation: gloss 2.8s ease-in-out infinite;
+    animation: gloss 2.5s ease-in-out infinite;
   }
 
   @keyframes gloss {
-    0%, 100% { opacity: 0.7; }
-    30% { opacity: 1; }
+    0%, 100% { opacity: 0.5; }
+    40% { opacity: 1; }
   }
 
   /* Сердечко при "чмоке" */
   .heart {
     position: absolute;
-    top: -10px;
+    top: -15px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 18px;
+    font-size: 20px;
     color: #E10600;
     opacity: 0;
-    animation: heartFloat 2.8s ease-in-out infinite;
+    animation: heartFloat 2.5s ease-in-out infinite;
   }
 
   @keyframes heartFloat {
-    0%, 25%, 100% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
-    30% { opacity: 1; transform: translate(-50%, -10px) scale(1); }
-    60% { opacity: 0; transform: translate(-50%, -30px) scale(0.8); }
+    0%, 35%, 100% { opacity: 0; transform: translate(-50%, 0) scale(0.3); }
+    40% { opacity: 1; transform: translate(-50%, -15px) scale(1.2); }
+    70% { opacity: 0; transform: translate(-50%, -40px) scale(0.6); }
   }
 
   /* === АДАПТИВ === */
@@ -361,10 +348,10 @@
 </head>
 <body>
 
-  <h1 class="logo lux-text" data-text="PRIVÉ">PRIVÉ</h1>
+  <h1 class="logo lux-text">PRIVÉ</h1>
   <p class="subtitle">Personal Secretary</p>
 
-  <h2 class="section-title lux-text" data-text="СЕГОДНЯ">СЕГОДНЯ</h2>
+  <h2 class="section-title lux-text">СЕГОДНЯ</h2>
 
   <div class="input-wrap">
     <div class="row">
@@ -373,13 +360,13 @@
     <div class="row">
       <input type="date" id="dateInput">
       <button class="btn btn-full" id="addBtn">Добавить</button>
-      <button class="voice-btn" id="voiceBtn" title="Диктовка">🎙</button>
+      <button class="voice-btn" id="voiceBtn" title="Диктовка"></button>
     </div>
   </div>
 
   <ul class="task-list" id="todayList"></ul>
 
-  <h2 class="section-title lux-text" data-text="ДРУГИЕ ЗАДАЧИ">ДРУГИЕ ЗАДАЧИ</h2>
+  <h2 class="section-title lux-text">ДРУГИЕ ЗАДАЧИ</h2>
   <ul class="task-list" id="otherList"></ul>
 
   <!-- Анимация губ внизу -->
@@ -436,7 +423,7 @@
                             .sort((a, b) => a.date.localeCompare(b.date));
 
     if (todayTasks.length === 0) {
-      todayList.innerHTML = '<li class="empty">Пока пусто. Надиктуй первую задачу </li>';
+      todayList.innerHTML = '<li class="empty">Пока пусто. Надиктуй первую задачу</li>';
     } else {
       todayTasks.forEach((t, i) => {
         todayList.appendChild(createTaskEl(t, tasks.indexOf(t), true));
@@ -466,12 +453,12 @@
 
     const check = document.createElement('button');
     check.className = 'task-btn';
-    check.textContent = t.done ? '' : '✓';
+    check.textContent = t.done ? '↩' : '✓';
     check.onclick = () => { tasks[idx].done = !tasks[idx].done; save(); };
 
     const del = document.createElement('button');
     del.className = 'task-btn del';
-    del.textContent = '';
+    del.textContent = '×';
     del.onclick = () => { tasks.splice(idx, 1); save(); };
 
     li.append(span, date, check, del);
@@ -512,7 +499,6 @@
         const text = e.results[0][0].transcript;
         taskInput.value = text;
         stopVoice();
-        // Автодобавление через 1 сек, если пользователь не начал редактировать
         setTimeout(() => {
           if (taskInput.value === text) addTask(text);
         }, 1200);
@@ -526,7 +512,7 @@
     recognition.start();
     isRecording = true;
     voiceBtn.classList.add('recording');
-    voiceBtn.textContent = '';
+    voiceBtn.textContent = '⏹';
   }
 
   function stopVoice() {
@@ -547,27 +533,6 @@
   taskInput.addEventListener('keypress', e => {
     if (e.key === 'Enter') addTask();
   });
-
-  // Регистрация Service Worker для офлайн-работы
-  if ('serviceWorker' in navigator) {
-    const swCode = `
-      self.addEventListener('install', e => self.skipWaiting());
-      self.addEventListener('activate', e => e.waitUntil(clients.claim()));
-      self.addEventListener('fetch', e => {
-        e.respondWith(
-          caches.open('prive-v1').then(cache =>
-            cache.match(e.request).then(r => r || fetch(e.request).then(resp => {
-              cache.put(e.request, resp.clone());
-              return resp;
-            }).catch(() => cache.match('/prive-ios-/')))
-          )
-        );
-      });
-    `;
-    const blob = new Blob([swCode], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(swUrl).catch(() => {});
-  }
 
   render();
 </script>
