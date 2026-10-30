@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="PRIVÉ">
-<link rel="apple-touch-icon" href="icon.png">
-<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.PNG">
+<link rel="icon" href="icon.PNG">
 <title>PRIVÉ</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@500;700&display=swap');
@@ -24,12 +24,11 @@
   }
 
   body {
-    padding: 20px 18px 150px 18px;
+    padding: 20px 18px 100px 18px;
     max-width: 600px;
     margin: 0 auto;
   }
 
-  /* === 3D МОЛОЧНЫЙ ТЕКСТ С ПЕРЕЛИВАЮЩИМСЯ ЗОЛОТОМ === */
   .lux-text {
     font-family: 'Playfair Display', 'Didot', 'Bodoni MT', serif;
     color: #f5e6d3;
@@ -39,11 +38,7 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shimmer 4s linear infinite;
-    text-shadow:
-      0 1px 0 #e8d5b7,
-      0 2px 0 #d4b896,
-      0 3px 0 #b89968,
-      0 4px 8px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 0 #e8d5b7, 0 2px 0 #d4b896, 0 3px 0 #b89968, 0 4px 8px rgba(0,0,0,0.8);
     -webkit-text-stroke: 0.3px #D4AF37;
   }
 
@@ -65,7 +60,7 @@
     font-size: 14px;
     letter-spacing: 4px;
     color: #D4AF37;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     font-style: italic;
   }
 
@@ -159,9 +154,9 @@
     100% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0); }
   }
 
-  .task-list { list-style: none; }
+  .task-list, .list-list { list-style: none; }
 
-  .task {
+  .task, .list-item {
     background: rgba(26, 26, 26, 0.7);
     border: 1px solid #D4AF37;
     border-left: 3px solid #D4AF37;
@@ -185,14 +180,14 @@
     to { opacity: 1; transform: translateX(0); }
   }
 
-  .task-text {
+  .task-text, .list-text {
     flex: 1;
     font-size: 16px;
     color: #f5e6d3;
     word-break: break-word;
   }
 
-  .task.done .task-text {
+  .task.done .task-text, .list-item.done .list-text {
     text-decoration: line-through;
     opacity: 0.5;
   }
@@ -204,7 +199,7 @@
     font-style: italic;
   }
 
-  .task-btn {
+  .task-btn, .list-btn {
     background: transparent;
     border: 1px solid #D4AF37;
     color: #D4AF37;
@@ -219,17 +214,17 @@
     flex-shrink: 0;
   }
 
-  .task-btn:hover {
+  .task-btn:hover, .list-btn:hover {
     background: #D4AF37;
     color: #0a0a0a;
   }
 
-  .task-btn.del {
+  .task-btn.del, .list-btn.del {
     border-color: #E10600;
     color: #E10600;
   }
 
-  .task-btn.del:hover {
+  .task-btn.del:hover, .list-btn.del:hover {
     background: #E10600;
     color: #fff;
   }
@@ -242,18 +237,60 @@
     font-size: 14px;
   }
 
-  /* === ГУБЫ В ПРАВОМ НИЖНЕМ УГЛУ === */
+  /* === НИЖНЕЕ МЕНЮ ВКЛАДОК === */
+  .tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 10, 0.98);
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 12px 0;
+    z-index: 90;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: #8a7a5a;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+  }
+
+  .tab-btn.active {
+    color: #D4AF37;
+    border-bottom: 2px solid #D4AF37;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  /* === ОГРОМНЫЕ ГУБЫ В ПРАВОМ НИЖНЕМ УГЛУ === */
   .lips-fab {
     position: fixed;
-    bottom: 25px;
-    right: 20px;
-    font-size: 85px;
+    bottom: 60px;
+    right: -10px;
+    font-size: 160px;
     line-height: 1;
     z-index: 100;
     transform: rotate(-28deg);
     transform-origin: center center;
     animation: kiss 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    filter: drop-shadow(0 6px 20px rgba(225, 6, 0, 0.8));
+    filter: drop-shadow(0 8px 25px rgba(225, 6, 0, 0.9));
     cursor: pointer;
     pointer-events: auto;
     user-select: none;
@@ -261,21 +298,11 @@
   }
 
   @keyframes kiss {
-    0%, 100% {
-      transform: rotate(-28deg) scale(1);
-    }
-    18% {
-      transform: rotate(-28deg) scale(1.15);
-    }
-    38% {
-      transform: rotate(-28deg) scale(0.6);
-    }
-    55% {
-      transform: rotate(-28deg) scale(0.65);
-    }
-    75% {
-      transform: rotate(-28deg) scale(1.08);
-    }
+    0%, 100% { transform: rotate(-28deg) scale(1); }
+    18% { transform: rotate(-28deg) scale(1.15); }
+    38% { transform: rotate(-28deg) scale(0.6); }
+    55% { transform: rotate(-28deg) scale(0.65); }
+    75% { transform: rotate(-28deg) scale(1.08); }
   }
 
   /* === ЛЕТАЮЩИЕ СЕРДЕЧКИ И ГУБКИ === */
@@ -283,34 +310,31 @@
     position: fixed;
     pointer-events: none;
     z-index: 50;
-    font-size: 28px;
-    opacity: 0;
+    font-size: 32px;
     will-change: transform, opacity;
   }
 
   .floater.heart { color: #E10600; text-shadow: 0 0 12px rgba(225, 6, 0, 0.9); }
   .floater.kiss { color: #ff2a3a; filter: drop-shadow(0 0 8px rgba(225, 6, 0, 0.7)); }
 
-  /* Разные траектории — генерируются JS */
-  @keyframes floatUp {
+  @keyframes floatRandom {
     0% {
       opacity: 0;
-      transform: translate(0, 0) scale(0.3) rotate(0deg);
+      transform: translate(0, 0) scale(0.2) rotate(0deg);
     }
-    15% {
+    10% {
       opacity: 1;
       transform: translate(var(--dx1), var(--dy1)) scale(1) rotate(var(--r1));
     }
-    70% {
+    60% {
       opacity: 0.8;
     }
     100% {
       opacity: 0;
-      transform: translate(var(--dx2), var(--dy2)) scale(0.4) rotate(var(--r2));
+      transform: translate(var(--dx2), var(--dy2)) scale(0.3) rotate(var(--r2));
     }
   }
 
-  /* Статус голосового ввода */
   .voice-status {
     position: fixed;
     top: 80px;
@@ -330,9 +354,7 @@
     box-shadow: 0 4px 20px rgba(225, 6, 0, 0.6);
   }
 
-  .voice-status.show {
-    opacity: 1;
-  }
+  .voice-status.show { opacity: 1; }
 
   .voice-status .dots::after {
     content: '';
@@ -346,12 +368,66 @@
     75% { content: '...'; }
   }
 
+  /* === СПИСКИ === */
+  .list-card {
+    background: rgba(26, 26, 26, 0.7);
+    border: 1px solid #D4AF37;
+    border-radius: 4px;
+    padding: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .list-card:hover {
+    background: rgba(40, 30, 20, 0.8);
+    transform: translateY(-2px);
+  }
+
+  .list-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f5e6d3;
+    margin-bottom: 6px;
+  }
+
+  .list-card-count {
+    font-size: 12px;
+    color: #D4AF37;
+    font-style: italic;
+  }
+
+  .list-detail {
+    display: none;
+  }
+
+  .list-detail.active {
+    display: block;
+  }
+
+  .back-btn {
+    background: transparent;
+    border: 1px solid #D4AF37;
+    color: #D4AF37;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+
+  .back-btn:hover {
+    background: #D4AF37;
+    color: #0a0a0a;
+  }
+
   @media (max-width: 480px) {
     .logo { font-size: 42px; letter-spacing: 4px; }
     .section-title { font-size: 18px; }
-    body { padding: 15px 14px 140px 14px; }
+    body { padding: 15px 14px 100px 14px; }
     .btn { padding: 12px 14px; font-size: 12px; }
-    .lips-fab { font-size: 70px; bottom: 20px; right: 15px; }
+    .lips-fab { font-size: 130px; bottom: 50px; right: -15px; }
   }
 </style>
 </head>
@@ -360,32 +436,77 @@
   <h1 class="logo lux-text">PRIVÉ</h1>
   <p class="subtitle">Personal Secretary</p>
 
-  <h2 class="section-title lux-text">СЕГОДНЯ</h2>
+  <!-- ВКЛАДКА ЗАДАЧИ -->
+  <div class="tab-content active" id="tabTasks">
+    <h2 class="section-title lux-text">СЕГОДНЯ</h2>
 
-  <div class="input-wrap">
-    <div class="row">
-      <input type="text" id="taskInput" placeholder="Надиктуй или напиши задачу...">
+    <div class="input-wrap">
+      <div class="row">
+        <input type="text" id="taskInput" placeholder="Надиктуй или напиши задачу...">
+      </div>
+      <div class="row">
+        <button class="btn btn-full" id="addBtn">Добавить</button>
+        <button class="voice-btn" id="voiceBtn" title="Диктовка">🎙</button>
+      </div>
     </div>
-    <div class="row">
-      <button class="btn btn-full" id="addBtn">Добавить</button>
-      <button class="voice-btn" id="voiceBtn" title="Диктовка">🎙</button>
+
+    <ul class="task-list" id="todayList"></ul>
+
+    <h2 class="section-title lux-text">ДРУГИЕ ЗАДАЧИ</h2>
+    <ul class="task-list" id="otherList"></ul>
+  </div>
+
+  <!-- ВКЛАДКА СПИСКИ -->
+  <div class="tab-content" id="tabLists">
+    <div id="listsOverview">
+      <h2 class="section-title lux-text">МОИ СПИСКИ</h2>
+      <button class="btn btn-full" id="addListBtn" style="margin-bottom: 20px;">+ Новый список</button>
+      <ul class="list-list" id="listsList"></ul>
+    </div>
+
+    <div class="list-detail" id="listDetail">
+      <button class="back-btn" id="backToLists">← Назад к спискам</button>
+      <h2 class="section-title lux-text" id="listDetailTitle"></h2>
+      <div class="input-wrap">
+        <div class="row">
+          <input type="text" id="listItemInput" placeholder="Добавить пункт...">
+        </div>
+        <div class="row">
+          <button class="btn btn-full" id="addListItemBtn">Добавить</button>
+          <button class="voice-btn" id="listVoiceBtn" title="Диктовка">🎙</button>
+        </div>
+      </div>
+      <ul class="task-list" id="listDetailItems"></ul>
     </div>
   </div>
 
-  <ul class="task-list" id="todayList"></ul>
-
-  <h2 class="section-title lux-text">ДРУГИЕ ЗАДАЧИ</h2>
-  <ul class="task-list" id="otherList"></ul>
-
-  <!-- Статус голосового ввода -->
   <div class="voice-status" id="voiceStatus">
     <span id="voiceStatusText">Слушаю</span><span class="dots"></span>
   </div>
 
-  <!-- Губы в правом нижнем углу -->
   <div class="lips-fab" id="lipsFab">💋</div>
 
+  <!-- НИЖНЕЕ МЕНЮ -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="tabTasks">Задачи</button>
+    <button class="tab-btn" data-tab="tabLists">Списки</button>
+  </div>
+
 <script>
+  // === ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ===
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // === ЗАДАЧИ ===
   const taskInput = document.getElementById('taskInput');
   const addBtn = document.getElementById('addBtn');
   const voiceBtn = document.getElementById('voiceBtn');
@@ -396,12 +517,13 @@
   const voiceStatusText = document.getElementById('voiceStatusText');
 
   let tasks = JSON.parse(localStorage.getItem('priveTasks') || '[]');
+  let lists = JSON.parse(localStorage.getItem('priveLists') || '[]');
   let isRecording = false;
   let recognition = null;
+  let currentListId = null;
 
   const today = new Date().toISOString().split('T')[0];
 
-  // === ЗВУКОВОЙ СИГНАЛ ===
   function beep(frequency = 800, duration = 150, volume = 0.3) {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -417,34 +539,30 @@
     } catch(e) {}
   }
 
-  // === ВИБРАЦИЯ ===
   function vibrate(pattern) {
-    if (navigator.vibrate) {
-      navigator.vibrate(pattern);
-    }
+    if (navigator.vibrate) navigator.vibrate(pattern);
   }
 
-  // === ГЕНЕРАЦИЯ ЛЕТАЮЩИХ СЕРДЕЧЕК И ГУБОК ===
   function spawnFloater(type) {
     const el = document.createElement('div');
     el.className = 'floater ' + type;
     el.textContent = type === 'heart' ? '♥' : '💋';
 
-    // Начальная позиция — от губ (правый нижний угол)
-    const startX = window.innerWidth - 60;
-    const startY = window.innerHeight - 100;
+    const startX = window.innerWidth - 80;
+    const startY = window.innerHeight - 120;
     el.style.left = startX + 'px';
     el.style.top = startY + 'px';
 
-    // Случайные параметры траектории
-    const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.2; // вверх с разбросом
-    const distance = 200 + Math.random() * 400;
-    const dx1 = Math.cos(angle) * distance * 0.3;
-    const dy1 = Math.sin(angle) * distance * 0.3;
-    const dx2 = Math.cos(angle) * distance + (Math.random() - 0.5) * 200;
-    const dy2 = Math.sin(angle) * distance - 100;
-    const r1 = (Math.random() - 0.5) * 60;
-    const r2 = r1 + (Math.random() - 0.5) * 120;
+    const upwardBias = -Math.PI / 2;
+    const finalAngle = upwardBias + (Math.random() - 0.5) * Math.PI * 1.5;
+    
+    const distance = 300 + Math.random() * 500;
+    const dx1 = Math.cos(finalAngle) * distance * 0.2;
+    const dy1 = Math.sin(finalAngle) * distance * 0.2;
+    const dx2 = Math.cos(finalAngle) * distance + (Math.random() - 0.5) * 300;
+    const dy2 = Math.sin(finalAngle) * distance - 150;
+    const r1 = (Math.random() - 0.5) * 90;
+    const r2 = r1 + (Math.random() - 0.5) * 180;
 
     el.style.setProperty('--dx1', dx1 + 'px');
     el.style.setProperty('--dy1', dy1 + 'px');
@@ -453,75 +571,50 @@
     el.style.setProperty('--r1', r1 + 'deg');
     el.style.setProperty('--r2', r2 + 'deg');
 
-    const duration = 3 + Math.random() * 2.5; // 3-5.5 секунд
-    el.style.animation = `floatUp ${duration}s ease-out forwards`;
-    el.style.fontSize = (20 + Math.random() * 20) + 'px';
+    const duration = 4 + Math.random() * 3;
+    el.style.animation = `floatRandom ${duration}s ease-out forwards`;
+    el.style.fontSize = (24 + Math.random() * 24) + 'px';
 
     document.body.appendChild(el);
-
-    setTimeout(() => {
-      el.remove();
-    }, duration * 1000);
+    setTimeout(() => el.remove(), duration * 1000);
   }
 
-  // Запуск фонтана сердечек и губок
   function launchKissBurst() {
-    const count = 6 + Math.floor(Math.random() * 4); // 6-9 штук
+    const count = 8 + Math.floor(Math.random() * 5);
     for (let i = 0; i < count; i++) {
       setTimeout(() => {
-        spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss');
-      }, i * 150);
+        spawnFloater(Math.random() > 0.4 ? 'heart' : 'kiss');
+      }, i * 100);
     }
   }
 
-  // Постоянный фоновый фонтан (раз в 4 секунды)
   setInterval(() => {
-    if (!isRecording) {
-      spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss');
-    }
-  }, 4000);
+    if (!isRecording) spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss');
+  }, 2500);
 
-  // Клик по губам — тоже запускает фонтан
   lipsFab.addEventListener('click', () => {
     launchKissBurst();
     vibrate(50);
   });
 
-  // === РАСПОЗНАВАНИЕ ДАТ ИЗ РЕЧИ ===
   function parseDateFromText(text) {
     const lower = text.toLowerCase();
-    const now = new Date();
-    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    // "завтра"
+    const todayDate = new Date();
+    
     if (lower.includes('завтра')) {
-      const d = new Date(todayDate);
-      d.setDate(d.getDate() + 1);
+      const d = new Date(todayDate); d.setDate(d.getDate() + 1);
       return d.toISOString().split('T')[0];
     }
-
-    // "послезавтра"
     if (lower.includes('послезавтра')) {
-      const d = new Date(todayDate);
-      d.setDate(d.getDate() + 2);
+      const d = new Date(todayDate); d.setDate(d.getDate() + 2);
       return d.toISOString().split('T')[0];
     }
-
-    // "через N дней"
     const daysMatch = lower.match(/через\s+(\d+)\s+дн/);
     if (daysMatch) {
-      const d = new Date(todayDate);
-      d.setDate(d.getDate() + parseInt(daysMatch[1]));
+      const d = new Date(todayDate); d.setDate(d.getDate() + parseInt(daysMatch[1]));
       return d.toISOString().split('T')[0];
     }
-
-    // Дни недели
-    const days = {
-      'понедельник': 1, 'вторник': 2, 'среда': 3, 'среду': 3,
-      'четверг': 4, 'пятница': 5, 'пятницу': 5,
-      'суббота': 6, 'воскресенье': 0, 'воскресение': 0
-    };
-
+    const days = {'понедельник': 1, 'вторник': 2, 'среда': 3, 'среду': 3, 'четверг': 4, 'пятница': 5, 'пятницу': 5, 'суббота': 6, 'воскресенье': 0, 'воскресение': 0};
     for (const [word, dayNum] of Object.entries(days)) {
       if (lower.includes(word)) {
         const d = new Date(todayDate);
@@ -532,17 +625,9 @@
         return d.toISOString().split('T')[0];
       }
     }
-
-    // "сегодня", "без даты", "на сегодня" — сегодня
-    if (lower.includes('сегодня') || lower.includes('без даты') || lower.includes('на сегодня')) {
-      return today;
-    }
-
-    // По умолчанию — сегодня
     return today;
   }
 
-  // Очистка текста от датных слов
   function cleanTaskText(text) {
     const lower = text.toLowerCase();
     const wordsToRemove = ['завтра', 'послезавтра', 'сегодня', 'без даты', 'на сегодня'];
@@ -557,13 +642,10 @@
       cleaned = cleaned.replace(new RegExp(w, 'gi'), '');
     });
     cleaned = cleaned.replace(/через\s+\d+\s+дн[яей]?\s*/gi, '');
-
-    // Убираем лишние пробелы и запятые в начале/конце
     cleaned = cleaned.replace(/^\s*[,\s]+|[,\s]+$/g, '').trim();
     return cleaned || text;
   }
 
-  // === ДОБАВЛЕНИЕ ЗАДАЧИ ===
   function addTask(text, customDate) {
     const value = typeof text === 'string' ? text : taskInput.value.trim();
     if (!value) return;
@@ -578,13 +660,11 @@
       id: Date.now()
     });
     taskInput.value = '';
-    save();
+    saveTasks();
 
-    // Голосовое подтверждение
     speak('Добавлено: ' + cleanText);
   }
 
-  // === СИНТЕЗ РЕЧИ ===
   function speak(text) {
     if ('speechSynthesis' in window) {
       const utter = new SpeechSynthesisUtterance(text);
@@ -595,12 +675,12 @@
     }
   }
 
-  function save() {
+  function saveTasks() {
     localStorage.setItem('priveTasks', JSON.stringify(tasks));
-    render();
+    renderTasks();
   }
 
-  function render() {
+  function renderTasks() {
     todayList.innerHTML = '';
     otherList.innerHTML = '';
 
@@ -640,12 +720,12 @@
     const check = document.createElement('button');
     check.className = 'task-btn';
     check.textContent = t.done ? '↩' : '✓';
-    check.onclick = () => { tasks[idx].done = !tasks[idx].done; save(); };
+    check.onclick = () => { tasks[idx].done = !tasks[idx].done; saveTasks(); };
 
     const del = document.createElement('button');
     del.className = 'task-btn del';
     del.textContent = '×';
-    del.onclick = () => { tasks.splice(idx, 1); save(); };
+    del.onclick = () => { tasks.splice(idx, 1); saveTasks(); };
 
     li.append(span, date, check, del);
     return li;
@@ -657,7 +737,6 @@
     return date.toLocaleDateString('ru-RU', opts);
   }
 
-  // === ГОЛОСОВОЙ ВВОД ===
   function showStatus(text) {
     voiceStatusText.textContent = text;
     voiceStatus.classList.add('show');
@@ -667,7 +746,7 @@
     voiceStatus.classList.remove('show');
   }
 
-  function startVoice() {
+  function startVoice(targetInput, callback) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) {
       showStatus('Голосовой ввод не поддерживается');
@@ -692,12 +771,11 @@
 
     recognition.onresult = e => {
       const text = e.results[0][0].transcript;
-      taskInput.value = text;
+      targetInput.value = text;
       stopVoice();
       showStatus('Распознано');
       setTimeout(() => {
-        addTask(text);
-        launchKissBurst();
+        if (callback) callback(text);
         hideStatus();
       }, 600);
     };
@@ -711,7 +789,6 @@
 
     recognition.onend = () => {
       if (isRecording) {
-        // iOS иногда закрывает recognition сразу — перезапускаем
         try { recognition.start(); } catch(e) { stopVoice(); }
       }
     };
@@ -742,7 +819,7 @@
 
   voiceBtn.addEventListener('click', () => {
     if (isRecording) stopVoice();
-    else startVoice();
+    else startVoice(taskInput, (text) => addTask(text));
   });
 
   taskInput.addEventListener('keypress', e => {
@@ -752,7 +829,167 @@
     }
   });
 
-  render();
+  // === СПИСКИ ===
+  const addListBtn = document.getElementById('addListBtn');
+  const listsList = document.getElementById('listsList');
+  const listsOverview = document.getElementById('listsOverview');
+  const listDetail = document.getElementById('listDetail');
+  const listDetailTitle = document.getElementById('listDetailTitle');
+  const listDetailItems = document.getElementById('listDetailItems');
+  const backToLists = document.getElementById('backToLists');
+  const listItemInput = document.getElementById('listItemInput');
+  const addListItemBtn = document.getElementById('addListItemBtn');
+  const listVoiceBtn = document.getElementById('listVoiceBtn');
+
+  function saveLists() {
+    localStorage.setItem('priveLists', JSON.stringify(lists));
+    renderLists();
+  }
+
+  function renderLists() {
+    listsList.innerHTML = '';
+
+    if (lists.length === 0) {
+      listsList.innerHTML = '<li class="empty">Нет сохранённых списков</li>';
+    } else {
+      lists.forEach((list, idx) => {
+        const li = document.createElement('li');
+        li.className = 'list-card';
+        
+        const title = document.createElement('div');
+        title.className = 'list-card-title';
+        title.textContent = list.name;
+
+        const count = document.createElement('div');
+        count.className = 'list-card-count';
+        const doneCount = list.items.filter(i => i.done).length;
+        count.textContent = `${list.items.length} пунктов, выполнено: ${doneCount}`;
+
+        const del = document.createElement('button');
+        del.className = 'list-btn del';
+        del.textContent = '×';
+        del.style.position = 'absolute';
+        del.style.right = '10px';
+        del.style.top = '10px';
+        del.onclick = (e) => {
+          e.stopPropagation();
+          if (confirm('Удалить список "' + list.name + '"?')) {
+            lists.splice(idx, 1);
+            saveLists();
+          }
+        };
+
+        li.append(title, count, del);
+        li.style.position = 'relative';
+        li.onclick = () => openList(idx);
+        listsList.appendChild(li);
+      });
+    }
+  }
+
+  function openList(idx) {
+    currentListId = idx;
+    const list = lists[idx];
+    listDetailTitle.textContent = list.name;
+    listsOverview.style.display = 'none';
+    listDetail.classList.add('active');
+    renderListItems();
+  }
+
+  function closeList() {
+    currentListId = null;
+    listDetail.classList.remove('active');
+    listsOverview.style.display = 'block';
+    listItemInput.value = '';
+  }
+
+  function renderListItems() {
+    listDetailItems.innerHTML = '';
+    const list = lists[currentListId];
+
+    if (list.items.length === 0) {
+      listDetailItems.innerHTML = '<li class="empty">Список пуст. Добавь первый пункт</li>';
+    } else {
+      list.items.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.className = 'task' + (item.done ? ' done' : '');
+
+        const span = document.createElement('span');
+        span.className = 'task-text';
+        span.textContent = item.text;
+
+        const check = document.createElement('button');
+        check.className = 'task-btn';
+        check.textContent = item.done ? '↩' : '✓';
+        check.onclick = () => {
+          lists[currentListId].items[idx].done = !lists[currentListId].items[idx].done;
+          saveLists();
+          renderListItems();
+        };
+
+        const del = document.createElement('button');
+        del.className = 'task-btn del';
+        del.textContent = '×';
+        del.onclick = () => {
+          lists[currentListId].items.splice(idx, 1);
+          saveLists();
+          renderListItems();
+        };
+
+        li.append(span, check, del);
+        listDetailItems.appendChild(li);
+      });
+    }
+  }
+
+  function addListItem(text) {
+    const value = typeof text === 'string' ? text : listItemInput.value.trim();
+    if (!value || currentListId === null) return;
+
+    // Разбиваем по запятым или "и" для массового добавления
+    const items = value.split(/[,;]| и /).map(s => s.trim()).filter(s => s);
+    
+    items.forEach(item => {
+      lists[currentListId].items.push({
+        text: item,
+        done: false,
+        id: Date.now() + Math.random()
+      });
+    });
+
+    listItemInput.value = '';
+    saveLists();
+    renderListItems();
+  }
+
+  addListBtn.addEventListener('click', () => {
+    const name = prompt('Название списка:');
+    if (name && name.trim()) {
+      lists.push({
+        name: name.trim(),
+        items: [],
+        id: Date.now()
+      });
+      saveLists();
+      launchKissBurst();
+    }
+  });
+
+  backToLists.addEventListener('click', closeList);
+
+  addListItemBtn.addEventListener('click', () => addListItem());
+
+  listVoiceBtn.addEventListener('click', () => {
+    if (isRecording) stopVoice();
+    else startVoice(listItemInput, (text) => addListItem(text));
+  });
+
+  listItemInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') addListItem();
+  });
+
+  renderTasks();
+  renderLists();
 </script>
 </body>
 </html>
