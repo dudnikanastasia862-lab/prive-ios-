@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIVÉ — Твои дела</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #0a0a0a;
+            color: #f7e7ce;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Didot', 'Bodoni MT', serif;
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #F7E7CE 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            text-align: center;
+            color: #D4AF37;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: 'Didot', 'Bodoni MT', serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #D4AF37;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="date"] {
+            flex: 1;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 2px solid #D4AF37;
+            color: #f7e7ce;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #E10600;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #FFD700;
+            color: #0a0a0a;
+        }
+
+        .voice-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .voice-btn.recording {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7);
+            }
+            70% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 20px rgba(225, 6, 0, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(225, 6, 0, 0);
+            }
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            background: #1a1a1a;
+            border: 2px solid #D4AF37;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-item.urgent {
+            border-color: #E10600;
+        }
+
+        .task-text {
+            flex: 1;
+        }
+
+        .task-date {
+            color: #D4AF37;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .delete-btn {
+            background: #E10600;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background: #FFD700;
+            color: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PRIVÉ</h1>
+        <p class="subtitle">Твои дела</p>
+
+        <h2 class="section-title">СЕГОДНЯ</h2>
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Новая задача">
+            <input type="date" id="dateInput">
+            <button id="addBtn">Добавить</button>
+            <button class="voice-btn" id="voiceBtn"></button>
+        </div>
+
+        <ul class="task-list" id="todayList"></ul>
+
+        <h2 class="section-title">ДРУГИЕ ЗАДАЧИ</h2>
+        <ul class="task-list" id="otherList"></ul>
+    </div>
+
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const dateInput = document.getElementById('dateInput');
+        const addBtn = document.getElementById('addBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const todayList = document.getElementById('todayList');
+        const otherList = document.getElementById('otherList');
+
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let isRecording = false;
+        let recognition = null;
+
+        // Установить сегодняшнюю дату по умолчанию
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function renderTasks() {
+            todayList.innerHTML = '';
+            otherList.innerHTML = '';
+
+            const todayTasks = tasks.filter(task => task.date === today || !task.date);
+            const otherTasks = tasks.filter(task => task.date !== today && task.date);
+
+            todayTasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item urgent';
+                li.innerHTML = `
+                    <span class="task-text">${task.text}</span>
+                    <span class="task-date">${task.date || 'Сегодня'}</span>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">Удалить</button>
+                `;
+                todayList.appendChild(li);
+            });
+
+            otherTasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                li.innerHTML = `
+                    <span class="task-text">${task.text}</span>
+                    <span class="task-date">${task.date}</span>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">Удалить</button>
+                `;
+                otherList.appendChild(li);
+            });
+        }
+
+        function addTask() {
+            const text = taskInput.value.trim();
+            const date = dateInput.value;
+
+            if (text) {
+                const task = {
+                    id: Date.now(),
+                    text: text,
+                    date: date
+                };
+
+                tasks.push(task);
+                taskInput.value = '';
+                saveTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            saveTasks();
+        }
+
+        function startVoiceRecognition() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert('Голосовой ввод не поддерживается в этом браузере');
+                return;
+            }
+
+            if (!recognition) {
+                recognition = new webkitSpeechRecognition();
+                recognition.lang = 'ru-RU';
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    taskInput.value = transcript;
+                    stopVoiceRecognition();
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Ошибка голосового ввода:', event.error);
+                    stopVoiceRecognition();
+                };
+            }
+
+            recognition.start();
+            isRecording = true;
+            voiceBtn.classList.add('recording');
+        }
+
+        function stopVoiceRecognition() {
+            if (recognition) {
+                recognition.stop();
+            }
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+        }
+
+        addBtn.addEventListener('click', addTask);
+        voiceBtn.addEventListener('click', () => {
+            if (isRecording) {
+                stopVoiceRecognition();
+            } else {
+                startVoiceRecognition();
+            }
+        });
+
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        renderTasks();
+    </script>
+</body>
+</html>
