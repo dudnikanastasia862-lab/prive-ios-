@@ -24,37 +24,27 @@
   }
 
   body {
-    padding: 20px 18px 140px 18px;
+    padding: 20px 18px 150px 18px;
     max-width: 600px;
     margin: 0 auto;
   }
 
-  /* === 3D МОЛОЧНЫЙ ТЕКСТ С ПЕРЕЛИВАЮЩЕЙСЯ ЗОЛОТОЙ ОКАНТОВКОЙ === */
+  /* === 3D МОЛОЧНЫЙ ТЕКСТ С ПЕРЕЛИВАЮЩИМСЯ ЗОЛОТОМ === */
   .lux-text {
     font-family: 'Playfair Display', 'Didot', 'Bodoni MT', serif;
-    color: transparent;
-    background: linear-gradient(
-      90deg,
-      #D4AF37 0%,
-      #FFF8DC 20%,
-      #FFD700 40%,
-      #FFF8DC 60%,
-      #D4AF37 80%,
-      #FFF8DC 100%
-    );
+    color: #f5e6d3;
+    background: linear-gradient(90deg, #D4AF37 0%, #FFF8DC 20%, #FFD700 40%, #FFF8DC 60%, #D4AF37 80%, #FFF8DC 100%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shimmer 4s linear infinite;
-    /* 3D объём через тени */
     text-shadow:
       0 1px 0 #e8d5b7,
       0 2px 0 #d4b896,
       0 3px 0 #b89968,
       0 4px 8px rgba(0,0,0,0.8);
-    /* Золотая окантовка */
-    -webkit-text-stroke: 0.5px #D4AF37;
+    -webkit-text-stroke: 0.3px #D4AF37;
   }
 
   @keyframes shimmer {
@@ -62,7 +52,6 @@
     100% { background-position: -200% 0; }
   }
 
-  /* === ЗАГОЛОВОК === */
   .logo {
     text-align: center;
     font-size: 52px;
@@ -80,7 +69,6 @@
     font-style: italic;
   }
 
-  /* === СЕКЦИИ === */
   .section-title {
     font-size: 22px;
     font-weight: 700;
@@ -90,7 +78,6 @@
     border-bottom: 1px solid rgba(212, 175, 55, 0.4);
   }
 
-  /* === ВВОД === */
   .input-wrap {
     display: flex;
     flex-direction: column;
@@ -123,7 +110,6 @@
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
   }
 
-  /* === КНОПКИ === */
   .btn {
     background: #E10600;
     color: #fff;
@@ -171,7 +157,6 @@
     100% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0); }
   }
 
-  /* === ЗАДАЧИ === */
   .task-list { list-style: none; }
 
   .task {
@@ -261,21 +246,30 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 120px;
+    height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
     z-index: 10;
-    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0) 100%);
+    background: linear-gradient(to top, rgba(10,10,10,0.98) 0%, rgba(10,10,10,0) 100%);
+  }
+
+  .lips-stage {
+    position: relative;
+    width: 140px;
+    height: 100px;
   }
 
   .lips {
-    width: 100px;
-    height: 60px;
-    position: relative;
-    animation: kiss 2.5s ease-in-out infinite;
-    filter: drop-shadow(0 4px 15px rgba(225, 6, 0, 0.6));
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-8deg);
+    width: 110px;
+    height: 70px;
+    animation: kiss 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    filter: drop-shadow(0 6px 18px rgba(225, 6, 0, 0.7));
   }
 
   .lips svg {
@@ -283,21 +277,22 @@
     height: 100%;
   }
 
+  /* Более выраженный чмок: долгое сжатие */
   @keyframes kiss {
     0%, 100% {
-      transform: scale(1);
+      transform: translate(-50%, -50%) rotate(-8deg) scale(1);
     }
-    20% {
-      transform: scale(1.15);
+    15% {
+      transform: translate(-50%, -50%) rotate(-8deg) scale(1.1);
     }
-    40% {
-      transform: scale(0.75);
+    35% {
+      transform: translate(-50%, -50%) rotate(-8deg) scale(0.65);
     }
-    60% {
-      transform: scale(1.05);
+    55% {
+      transform: translate(-50%, -50%) rotate(-8deg) scale(0.7);
     }
-    80% {
-      transform: scale(0.95);
+    75% {
+      transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
     }
   }
 
@@ -305,43 +300,77 @@
   .lips::after {
     content: '';
     position: absolute;
-    top: 15%;
-    left: 20%;
-    width: 25%;
-    height: 20%;
-    background: radial-gradient(ellipse, rgba(255,255,255,0.7) 0%, transparent 70%);
+    top: 18%;
+    left: 25%;
+    width: 20%;
+    height: 18%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.8) 0%, transparent 70%);
     border-radius: 50%;
-    animation: gloss 2.5s ease-in-out infinite;
+    animation: gloss 3s ease-in-out infinite;
   }
 
   @keyframes gloss {
-    0%, 100% { opacity: 0.5; }
-    40% { opacity: 1; }
+    0%, 100% { opacity: 0.4; }
+    35% { opacity: 1; }
   }
 
-  /* Сердечко при "чмоке" */
-  .heart {
+  /* Летающие сердечки и отпечатки */
+  .flying {
     position: absolute;
-    top: -15px;
     left: 50%;
-    transform: translateX(-50%);
-    font-size: 20px;
-    color: #E10600;
+    top: 50%;
+    font-size: 18px;
     opacity: 0;
-    animation: heartFloat 2.5s ease-in-out infinite;
+    pointer-events: none;
   }
 
-  @keyframes heartFloat {
-    0%, 35%, 100% { opacity: 0; transform: translate(-50%, 0) scale(0.3); }
-    40% { opacity: 1; transform: translate(-50%, -15px) scale(1.2); }
-    70% { opacity: 0; transform: translate(-50%, -40px) scale(0.6); }
+  .flying.heart {
+    color: #E10600;
+    text-shadow: 0 0 8px rgba(225, 6, 0, 0.8);
   }
 
-  /* === АДАПТИВ === */
+  .flying.kiss {
+    font-size: 16px;
+    color: #E10600;
+  }
+
+  .flying.h1 { animation: fly1 3s ease-out infinite; }
+  .flying.h2 { animation: fly2 3s ease-out infinite 0.3s; }
+  .flying.h3 { animation: fly3 3s ease-out infinite 0.6s; }
+  .flying.h4 { animation: fly4 3s ease-out infinite 0.9s; }
+
+  @keyframes fly1 {
+    0%, 30% { opacity: 0; transform: translate(-50%, 0) scale(0.3) rotate(0deg); }
+    40% { opacity: 1; transform: translate(-50%, -10px) scale(1) rotate(-10deg); }
+    70% { opacity: 1; transform: translate(-80%, -60px) scale(1.2) rotate(-20deg); }
+    100% { opacity: 0; transform: translate(-100%, -110px) scale(0.5) rotate(-30deg); }
+  }
+
+  @keyframes fly2 {
+    0%, 30% { opacity: 0; transform: translate(-50%, 0) scale(0.3) rotate(0deg); }
+    40% { opacity: 1; transform: translate(-50%, -10px) scale(0.9) rotate(15deg); }
+    70% { opacity: 1; transform: translate(-20%, -70px) scale(1.1) rotate(25deg); }
+    100% { opacity: 0; transform: translate(0%, -120px) scale(0.4) rotate(40deg); }
+  }
+
+  @keyframes fly3 {
+    0%, 30% { opacity: 0; transform: translate(-50%, 0) scale(0.3); }
+    40% { opacity: 1; transform: translate(-50%, -15px) scale(1.1); }
+    70% { opacity: 1; transform: translate(-60%, -80px) scale(1.3); }
+    100% { opacity: 0; transform: translate(-70%, -130px) scale(0.3); }
+  }
+
+  @keyframes fly4 {
+    0%, 30% { opacity: 0; transform: translate(-50%, 0) scale(0.3) rotate(0deg); }
+    40% { opacity: 1; transform: translate(-50%, -10px) scale(1) rotate(10deg); }
+    70% { opacity: 1; transform: translate(-40%, -65px) scale(1.15) rotate(15deg); }
+    100% { opacity: 0; transform: translate(-30%, -115px) scale(0.5) rotate(20deg); }
+  }
+
   @media (max-width: 480px) {
     .logo { font-size: 42px; letter-spacing: 4px; }
     .section-title { font-size: 18px; }
-    body { padding: 15px 14px 130px 14px; }
+    body { padding: 15px 14px 140px 14px; }
     .btn { padding: 12px 14px; font-size: 12px; }
   }
 </style>
@@ -371,26 +400,54 @@
 
   <!-- Анимация губ внизу -->
   <div class="lips-container">
-    <div class="lips">
-      <span class="heart">♥</span>
-      <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="lipGrad" cx="50%" cy="40%" r="60%">
-            <stop offset="0%" stop-color="#ff2a3a"/>
-            <stop offset="50%" stop-color="#E10600"/>
-            <stop offset="100%" stop-color="#8b0000"/>
-          </radialGradient>
-        </defs>
-        <!-- Верхняя губа -->
-        <path d="M 10 30 Q 25 10 40 22 Q 50 15 60 22 Q 75 10 90 30 Q 75 25 50 28 Q 25 25 10 30 Z"
-              fill="url(#lipGrad)" stroke="#5a0000" stroke-width="0.5"/>
-        <!-- Нижняя губа -->
-        <path d="M 10 30 Q 25 55 50 55 Q 75 55 90 30 Q 75 35 50 33 Q 25 35 10 30 Z"
-              fill="url(#lipGrad)" stroke="#5a0000" stroke-width="0.5"/>
-        <!-- Линия между губами -->
-        <path d="M 12 30 Q 30 32 50 30 Q 70 32 88 30"
-              fill="none" stroke="#3a0000" stroke-width="1.2"/>
-      </svg>
+    <div class="lips-stage">
+      <!-- Летающие сердечки и отпечатки -->
+      <span class="flying heart h1">♥</span>
+      <span class="flying kiss h2">💋</span>
+      <span class="flying heart h3">♥</span>
+      <span class="flying kiss h4">💋</span>
+
+      <!-- Губы с более пухлой верхней частью -->
+      <div class="lips">
+        <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="lipGrad" cx="50%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#ff3a4a"/>
+              <stop offset="40%" stop-color="#E10600"/>
+              <stop offset="100%" stop-color="#7a0000"/>
+            </radialGradient>
+            <radialGradient id="lipShine" cx="40%" cy="30%" r="40%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </radialGradient>
+          </defs>
+          <!-- Верхняя губа — более пухлая, с выраженным луком Купидона -->
+          <path d="M 10 42 
+                   Q 20 20 35 28 
+                   Q 45 18 55 26 
+                   Q 60 22 65 26 
+                   Q 75 18 85 28 
+                   Q 100 20 110 42 
+                   Q 90 36 60 38 
+                   Q 30 36 10 42 Z"
+                fill="url(#lipGrad)" stroke="#4a0000" stroke-width="0.8"/>
+          <!-- Блеск на верхней губе -->
+          <path d="M 30 32 Q 40 26 50 30 Q 45 32 35 34 Z"
+                fill="url(#lipShine)"/>
+          <!-- Нижняя губа — пухлая -->
+          <path d="M 10 42 
+                   Q 25 75 60 75 
+                   Q 95 75 110 42 
+                   Q 90 50 60 48 
+                   Q 30 50 10 42 Z"
+                fill="url(#lipGrad)" stroke="#4a0000" stroke-width="0.8"/>
+          <!-- Блеск на нижней губе -->
+          <ellipse cx="60" cy="58" rx="22" ry="8" fill="url(#lipShine)" opacity="0.6"/>
+          <!-- Линия между губами -->
+          <path d="M 12 42 Q 35 44 60 42 Q 85 44 108 42"
+                fill="none" stroke="#3a0000" stroke-width="1.5"/>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -487,7 +544,7 @@
   function startVoice() {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) {
-      alert('Голосовой ввод не поддерживается в этом браузере. Используй Safari.');
+      alert('Голосовой ввод не поддерживается. Используй Safari.');
       return;
     }
     if (!recognition) {
