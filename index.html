@@ -90,7 +90,7 @@
     gap: 8px;
   }
 
-  input[type="text"], input[type="date"] {
+  input[type="text"] {
     flex: 1;
     padding: 14px 12px;
     background: rgba(26, 26, 26, 0.8);
@@ -134,26 +134,28 @@
   .btn-full { width: 100%; }
 
   .voice-btn {
-    width: 50px;
-    height: 50px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     padding: 0;
-    font-size: 22px;
+    font-size: 26px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #E10600;
+    border: 2px solid #fff;
     box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7);
   }
 
   .voice-btn.recording {
-    animation: pulse-red 1.4s infinite;
+    animation: pulse-red 1.2s infinite;
+    background: #ff2a2a;
   }
 
   @keyframes pulse-red {
-    0% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.8); }
-    70% { box-shadow: 0 0 0 18px rgba(225, 6, 0, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.9); }
+    70% { box-shadow: 0 0 0 20px rgba(225, 6, 0, 0); }
     100% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0); }
   }
 
@@ -240,131 +242,108 @@
     font-size: 14px;
   }
 
-  /* === АНИМАЦИЯ ГУБ ВНИЗУ === */
-  .lips-container {
+  /* === ГУБЫ В ПРАВОМ НИЖНЕМ УГЛУ === */
+  .lips-fab {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 10;
-    background: linear-gradient(to top, rgba(10,10,10,0.98) 0%, rgba(10,10,10,0) 100%);
+    bottom: 25px;
+    right: 20px;
+    font-size: 85px;
+    line-height: 1;
+    z-index: 100;
+    transform: rotate(-28deg);
+    transform-origin: center center;
+    animation: kiss 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    filter: drop-shadow(0 6px 20px rgba(225, 6, 0, 0.8));
+    cursor: pointer;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
-  .lips-stage {
-    position: relative;
-    width: 140px;
-    height: 100px;
-  }
-
-  .lips {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-8deg);
-    width: 110px;
-    height: 70px;
-    animation: kiss 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    filter: drop-shadow(0 6px 18px rgba(225, 6, 0, 0.7));
-  }
-
-  .lips svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Более выраженный чмок: долгое сжатие */
   @keyframes kiss {
     0%, 100% {
-      transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+      transform: rotate(-28deg) scale(1);
     }
-    15% {
-      transform: translate(-50%, -50%) rotate(-8deg) scale(1.1);
+    18% {
+      transform: rotate(-28deg) scale(1.15);
     }
-    35% {
-      transform: translate(-50%, -50%) rotate(-8deg) scale(0.65);
+    38% {
+      transform: rotate(-28deg) scale(0.6);
     }
     55% {
-      transform: translate(-50%, -50%) rotate(-8deg) scale(0.7);
+      transform: rotate(-28deg) scale(0.65);
     }
     75% {
-      transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
+      transform: rotate(-28deg) scale(1.08);
     }
   }
 
-  /* Блеск на губах */
-  .lips::after {
-    content: '';
-    position: absolute;
-    top: 18%;
-    left: 25%;
-    width: 20%;
-    height: 18%;
-    background: radial-gradient(ellipse, rgba(255,255,255,0.8) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: gloss 3s ease-in-out infinite;
-  }
-
-  @keyframes gloss {
-    0%, 100% { opacity: 0.4; }
-    35% { opacity: 1; }
-  }
-
-  /* Летающие сердечки и отпечатки */
-  .flying {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    font-size: 18px;
-    opacity: 0;
+  /* === ЛЕТАЮЩИЕ СЕРДЕЧКИ И ГУБКИ === */
+  .floater {
+    position: fixed;
     pointer-events: none;
+    z-index: 50;
+    font-size: 28px;
+    opacity: 0;
+    will-change: transform, opacity;
   }
 
-  .flying.heart {
-    color: #E10600;
-    text-shadow: 0 0 8px rgba(225, 6, 0, 0.8);
+  .floater.heart { color: #E10600; text-shadow: 0 0 12px rgba(225, 6, 0, 0.9); }
+  .floater.kiss { color: #ff2a3a; filter: drop-shadow(0 0 8px rgba(225, 6, 0, 0.7)); }
+
+  /* Разные траектории — генерируются JS */
+  @keyframes floatUp {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0) scale(0.3) rotate(0deg);
+    }
+    15% {
+      opacity: 1;
+      transform: translate(var(--dx1), var(--dy1)) scale(1) rotate(var(--r1));
+    }
+    70% {
+      opacity: 0.8;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--dx2), var(--dy2)) scale(0.4) rotate(var(--r2));
+    }
   }
 
-  .flying.kiss {
-    font-size: 16px;
-    color: #E10600;
+  /* Статус голосового ввода */
+  .voice-status {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(225, 6, 0, 0.95);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 4px 20px rgba(225, 6, 0, 0.6);
   }
 
-  .flying.h1 { animation: fly1 3s ease-out infinite; }
-  .flying.h2 { animation: fly2 3s ease-out infinite 0.3s; }
-  .flying.h3 { animation: fly3 3s ease-out infinite 0.6s; }
-  .flying.h4 { animation: fly4 3s ease-out infinite 0.9s; }
-
-  @keyframes fly1 {
-    0%, 30% { opacity: 0; transform: translate(-50%, 0) scale(0.3) rotate(0deg); }
-    40% { opacity: 1; transform: translate(-50%, -10px) scale(1) rotate(-10deg); }
-    70% { opacity: 1; transform: translate(-80%, -60px) scale(1.2) rotate(-20deg); }
-    100% { opacity: 0; transform: translate(-100%, -110px) scale(0.5) rotate(-30deg); }
+  .voice-status.show {
+    opacity: 1;
   }
 
-  @keyframes fly2 {
-    0%, 30% { opacity: 0; transform: translate(-50%, 0) scale(0.3) rotate(0deg); }
-    40% { opacity: 1; transform: translate(-50%, -10px) scale(0.9) rotate(15deg); }
-    70% { opacity: 1; transform: translate(-20%, -70px) scale(1.1) rotate(25deg); }
-    100% { opacity: 0; transform: translate(0%, -120px) scale(0.4) rotate(40deg); }
+  .voice-status .dots::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
   }
 
-  @keyframes fly3 {
-    0%, 30% { opacity: 0; transform: translate(-50%, 0) scale(0.3); }
-    40% { opacity: 1; transform: translate(-50%, -15px) scale(1.1); }
-    70% { opacity: 1; transform: translate(-60%, -80px) scale(1.3); }
-    100% { opacity: 0; transform: translate(-70%, -130px) scale(0.3); }
-  }
-
-  @keyframes fly4 {
-    0%, 30% { opacity: 0; transform: translate(-50%, 0) scale(0.3) rotate(0deg); }
-    40% { opacity: 1; transform: translate(-50%, -10px) scale(1) rotate(10deg); }
-    70% { opacity: 1; transform: translate(-40%, -65px) scale(1.15) rotate(15deg); }
-    100% { opacity: 0; transform: translate(-30%, -115px) scale(0.5) rotate(20deg); }
+  @keyframes dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
   }
 
   @media (max-width: 480px) {
@@ -372,6 +351,7 @@
     .section-title { font-size: 18px; }
     body { padding: 15px 14px 140px 14px; }
     .btn { padding: 12px 14px; font-size: 12px; }
+    .lips-fab { font-size: 70px; bottom: 20px; right: 15px; }
   }
 </style>
 </head>
@@ -387,9 +367,8 @@
       <input type="text" id="taskInput" placeholder="Надиктуй или напиши задачу...">
     </div>
     <div class="row">
-      <input type="date" id="dateInput">
       <button class="btn btn-full" id="addBtn">Добавить</button>
-      <button class="voice-btn" id="voiceBtn" title="Диктовка"></button>
+      <button class="voice-btn" id="voiceBtn" title="Диктовка">🎙</button>
     </div>
   </div>
 
@@ -398,73 +377,223 @@
   <h2 class="section-title lux-text">ДРУГИЕ ЗАДАЧИ</h2>
   <ul class="task-list" id="otherList"></ul>
 
-  <!-- Анимация губ внизу -->
-  <div class="lips-container">
-    <div class="lips-stage">
-      <!-- Летающие сердечки и отпечатки -->
-      <span class="flying heart h1">♥</span>
-      <span class="flying kiss h2">💋</span>
-      <span class="flying heart h3">♥</span>
-      <span class="flying kiss h4">💋</span>
-
-      <!-- Губы с более пухлой верхней частью -->
-      <div class="lips">
-        <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="lipGrad" cx="50%" cy="35%" r="65%">
-              <stop offset="0%" stop-color="#ff3a4a"/>
-              <stop offset="40%" stop-color="#E10600"/>
-              <stop offset="100%" stop-color="#7a0000"/>
-            </radialGradient>
-            <radialGradient id="lipShine" cx="40%" cy="30%" r="40%">
-              <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-            </radialGradient>
-          </defs>
-          <!-- Верхняя губа — более пухлая, с выраженным луком Купидона -->
-          <path d="M 10 42 
-                   Q 20 20 35 28 
-                   Q 45 18 55 26 
-                   Q 60 22 65 26 
-                   Q 75 18 85 28 
-                   Q 100 20 110 42 
-                   Q 90 36 60 38 
-                   Q 30 36 10 42 Z"
-                fill="url(#lipGrad)" stroke="#4a0000" stroke-width="0.8"/>
-          <!-- Блеск на верхней губе -->
-          <path d="M 30 32 Q 40 26 50 30 Q 45 32 35 34 Z"
-                fill="url(#lipShine)"/>
-          <!-- Нижняя губа — пухлая -->
-          <path d="M 10 42 
-                   Q 25 75 60 75 
-                   Q 95 75 110 42 
-                   Q 90 50 60 48 
-                   Q 30 50 10 42 Z"
-                fill="url(#lipGrad)" stroke="#4a0000" stroke-width="0.8"/>
-          <!-- Блеск на нижней губе -->
-          <ellipse cx="60" cy="58" rx="22" ry="8" fill="url(#lipShine)" opacity="0.6"/>
-          <!-- Линия между губами -->
-          <path d="M 12 42 Q 35 44 60 42 Q 85 44 108 42"
-                fill="none" stroke="#3a0000" stroke-width="1.5"/>
-        </svg>
-      </div>
-    </div>
+  <!-- Статус голосового ввода -->
+  <div class="voice-status" id="voiceStatus">
+    <span id="voiceStatusText">Слушаю</span><span class="dots"></span>
   </div>
+
+  <!-- Губы в правом нижнем углу -->
+  <div class="lips-fab" id="lipsFab">💋</div>
 
 <script>
   const taskInput = document.getElementById('taskInput');
-  const dateInput = document.getElementById('dateInput');
   const addBtn = document.getElementById('addBtn');
   const voiceBtn = document.getElementById('voiceBtn');
+  const lipsFab = document.getElementById('lipsFab');
   const todayList = document.getElementById('todayList');
   const otherList = document.getElementById('otherList');
+  const voiceStatus = document.getElementById('voiceStatus');
+  const voiceStatusText = document.getElementById('voiceStatusText');
 
   let tasks = JSON.parse(localStorage.getItem('priveTasks') || '[]');
   let isRecording = false;
   let recognition = null;
 
   const today = new Date().toISOString().split('T')[0];
-  dateInput.value = today;
+
+  // === ЗВУКОВОЙ СИГНАЛ ===
+  function beep(frequency = 800, duration = 150, volume = 0.3) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.frequency.value = frequency;
+      osc.type = 'sine';
+      gain.gain.value = volume;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration / 1000);
+    } catch(e) {}
+  }
+
+  // === ВИБРАЦИЯ ===
+  function vibrate(pattern) {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+    }
+  }
+
+  // === ГЕНЕРАЦИЯ ЛЕТАЮЩИХ СЕРДЕЧЕК И ГУБОК ===
+  function spawnFloater(type) {
+    const el = document.createElement('div');
+    el.className = 'floater ' + type;
+    el.textContent = type === 'heart' ? '♥' : '💋';
+
+    // Начальная позиция — от губ (правый нижний угол)
+    const startX = window.innerWidth - 60;
+    const startY = window.innerHeight - 100;
+    el.style.left = startX + 'px';
+    el.style.top = startY + 'px';
+
+    // Случайные параметры траектории
+    const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.2; // вверх с разбросом
+    const distance = 200 + Math.random() * 400;
+    const dx1 = Math.cos(angle) * distance * 0.3;
+    const dy1 = Math.sin(angle) * distance * 0.3;
+    const dx2 = Math.cos(angle) * distance + (Math.random() - 0.5) * 200;
+    const dy2 = Math.sin(angle) * distance - 100;
+    const r1 = (Math.random() - 0.5) * 60;
+    const r2 = r1 + (Math.random() - 0.5) * 120;
+
+    el.style.setProperty('--dx1', dx1 + 'px');
+    el.style.setProperty('--dy1', dy1 + 'px');
+    el.style.setProperty('--dx2', dx2 + 'px');
+    el.style.setProperty('--dy2', dy2 + 'px');
+    el.style.setProperty('--r1', r1 + 'deg');
+    el.style.setProperty('--r2', r2 + 'deg');
+
+    const duration = 3 + Math.random() * 2.5; // 3-5.5 секунд
+    el.style.animation = `floatUp ${duration}s ease-out forwards`;
+    el.style.fontSize = (20 + Math.random() * 20) + 'px';
+
+    document.body.appendChild(el);
+
+    setTimeout(() => {
+      el.remove();
+    }, duration * 1000);
+  }
+
+  // Запуск фонтана сердечек и губок
+  function launchKissBurst() {
+    const count = 6 + Math.floor(Math.random() * 4); // 6-9 штук
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss');
+      }, i * 150);
+    }
+  }
+
+  // Постоянный фоновый фонтан (раз в 4 секунды)
+  setInterval(() => {
+    if (!isRecording) {
+      spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss');
+    }
+  }, 4000);
+
+  // Клик по губам — тоже запускает фонтан
+  lipsFab.addEventListener('click', () => {
+    launchKissBurst();
+    vibrate(50);
+  });
+
+  // === РАСПОЗНАВАНИЕ ДАТ ИЗ РЕЧИ ===
+  function parseDateFromText(text) {
+    const lower = text.toLowerCase();
+    const now = new Date();
+    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    // "завтра"
+    if (lower.includes('завтра')) {
+      const d = new Date(todayDate);
+      d.setDate(d.getDate() + 1);
+      return d.toISOString().split('T')[0];
+    }
+
+    // "послезавтра"
+    if (lower.includes('послезавтра')) {
+      const d = new Date(todayDate);
+      d.setDate(d.getDate() + 2);
+      return d.toISOString().split('T')[0];
+    }
+
+    // "через N дней"
+    const daysMatch = lower.match(/через\s+(\d+)\s+дн/);
+    if (daysMatch) {
+      const d = new Date(todayDate);
+      d.setDate(d.getDate() + parseInt(daysMatch[1]));
+      return d.toISOString().split('T')[0];
+    }
+
+    // Дни недели
+    const days = {
+      'понедельник': 1, 'вторник': 2, 'среда': 3, 'среду': 3,
+      'четверг': 4, 'пятница': 5, 'пятницу': 5,
+      'суббота': 6, 'воскресенье': 0, 'воскресение': 0
+    };
+
+    for (const [word, dayNum] of Object.entries(days)) {
+      if (lower.includes(word)) {
+        const d = new Date(todayDate);
+        const currentDay = d.getDay();
+        let daysUntil = dayNum - currentDay;
+        if (daysUntil <= 0) daysUntil += 7;
+        d.setDate(d.getDate() + daysUntil);
+        return d.toISOString().split('T')[0];
+      }
+    }
+
+    // "сегодня", "без даты", "на сегодня" — сегодня
+    if (lower.includes('сегодня') || lower.includes('без даты') || lower.includes('на сегодня')) {
+      return today;
+    }
+
+    // По умолчанию — сегодня
+    return today;
+  }
+
+  // Очистка текста от датных слов
+  function cleanTaskText(text) {
+    const lower = text.toLowerCase();
+    const wordsToRemove = ['завтра', 'послезавтра', 'сегодня', 'без даты', 'на сегодня'];
+    const daysWords = ['в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу', 'в воскресенье',
+                       'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу', 'воскресенье'];
+
+    let cleaned = text;
+    wordsToRemove.forEach(w => {
+      cleaned = cleaned.replace(new RegExp(w, 'gi'), '');
+    });
+    daysWords.forEach(w => {
+      cleaned = cleaned.replace(new RegExp(w, 'gi'), '');
+    });
+    cleaned = cleaned.replace(/через\s+\d+\s+дн[яей]?\s*/gi, '');
+
+    // Убираем лишние пробелы и запятые в начале/конце
+    cleaned = cleaned.replace(/^\s*[,\s]+|[,\s]+$/g, '').trim();
+    return cleaned || text;
+  }
+
+  // === ДОБАВЛЕНИЕ ЗАДАЧИ ===
+  function addTask(text, customDate) {
+    const value = typeof text === 'string' ? text : taskInput.value.trim();
+    if (!value) return;
+
+    const date = customDate || parseDateFromText(value);
+    const cleanText = customDate ? value : cleanTaskText(value);
+
+    tasks.push({
+      text: cleanText,
+      date: date,
+      done: false,
+      id: Date.now()
+    });
+    taskInput.value = '';
+    save();
+
+    // Голосовое подтверждение
+    speak('Добавлено: ' + cleanText);
+  }
+
+  // === СИНТЕЗ РЕЧИ ===
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'ru-RU';
+      utter.rate = 1.1;
+      utter.pitch = 1;
+      window.speechSynthesis.speak(utter);
+    }
+  }
 
   function save() {
     localStorage.setItem('priveTasks', JSON.stringify(tasks));
@@ -528,48 +657,71 @@
     return date.toLocaleDateString('ru-RU', opts);
   }
 
-  function addTask(text) {
-    const value = typeof text === 'string' ? text : taskInput.value.trim();
-    if (!value) return;
-    tasks.push({
-      text: value,
-      date: dateInput.value || today,
-      done: false,
-      id: Date.now()
-    });
-    taskInput.value = '';
-    save();
+  // === ГОЛОСОВОЙ ВВОД ===
+  function showStatus(text) {
+    voiceStatusText.textContent = text;
+    voiceStatus.classList.add('show');
+  }
+
+  function hideStatus() {
+    voiceStatus.classList.remove('show');
   }
 
   function startVoice() {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) {
-      alert('Голосовой ввод не поддерживается. Используй Safari.');
+      showStatus('Голосовой ввод не поддерживается');
+      setTimeout(hideStatus, 2000);
       return;
     }
-    if (!recognition) {
-      recognition = new SR();
-      recognition.lang = 'ru-RU';
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.onresult = e => {
-        const text = e.results[0][0].transcript;
-        taskInput.value = text;
-        stopVoice();
-        setTimeout(() => {
-          if (taskInput.value === text) addTask(text);
-        }, 1200);
-      };
-      recognition.onerror = e => {
-        console.error(e.error);
-        stopVoice();
-      };
-      recognition.onend = () => stopVoice();
+
+    recognition = new SR();
+    recognition.lang = 'ru-RU';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      isRecording = true;
+      voiceBtn.classList.add('recording');
+      voiceBtn.textContent = '⏹';
+      showStatus('Слушаю');
+      vibrate([50, 30, 50]);
+      beep(880, 200, 0.3);
+    };
+
+    recognition.onresult = e => {
+      const text = e.results[0][0].transcript;
+      taskInput.value = text;
+      stopVoice();
+      showStatus('Распознано');
+      setTimeout(() => {
+        addTask(text);
+        launchKissBurst();
+        hideStatus();
+      }, 600);
+    };
+
+    recognition.onerror = e => {
+      console.error('Speech error:', e.error);
+      showStatus('Ошибка: ' + e.error);
+      stopVoice();
+      setTimeout(hideStatus, 2000);
+    };
+
+    recognition.onend = () => {
+      if (isRecording) {
+        // iOS иногда закрывает recognition сразу — перезапускаем
+        try { recognition.start(); } catch(e) { stopVoice(); }
+      }
+    };
+
+    try {
+      recognition.start();
+    } catch(e) {
+      showStatus('Не удалось запустить микрофон');
+      setTimeout(hideStatus, 2000);
     }
-    recognition.start();
-    isRecording = true;
-    voiceBtn.classList.add('recording');
-    voiceBtn.textContent = '⏹';
   }
 
   function stopVoice() {
@@ -579,16 +731,25 @@
     isRecording = false;
     voiceBtn.classList.remove('recording');
     voiceBtn.textContent = '🎙';
+    vibrate(100);
+    beep(440, 200, 0.3);
   }
 
-  addBtn.addEventListener('click', () => addTask());
+  addBtn.addEventListener('click', () => {
+    addTask();
+    launchKissBurst();
+  });
+
   voiceBtn.addEventListener('click', () => {
     if (isRecording) stopVoice();
     else startVoice();
   });
 
   taskInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') addTask();
+    if (e.key === 'Enter') {
+      addTask();
+      launchKissBurst();
+    }
   });
 
   render();
