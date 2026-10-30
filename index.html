@@ -1,306 +1,575 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRIVÉ — Твои дела</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PRIVÉ">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<title>PRIVÉ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@500;700&display=swap');
 
-        body {
-            font-family: 'Georgia', serif;
-            background: #0a0a0a;
-            color: #f7e7ce;
-            min-height: 100vh;
-            padding: 20px;
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
+  html, body {
+    background: #0a0a0a;
+    color: #f5e6d3;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-        h1 {
-            font-family: 'Didot', 'Bodoni MT', serif;
-            font-size: 48px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #F7E7CE 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-        }
+  body {
+    padding: 20px 18px 140px 18px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
-        .subtitle {
-            font-size: 18px;
-            text-align: center;
-            color: #D4AF37;
-            margin-bottom: 40px;
-        }
+  /* === 3D МОЛОЧНЫЙ ТЕКСТ С ПЕРЕЛИВАЮЩЕЙСЯ ЗОЛОТОЙ ОКАНТОВКОЙ === */
+  .lux-text {
+    color: #f5e6d3;
+    font-family: 'Playfair Display', 'Didot', 'Bodoni MT', serif;
+    /* 3D объём */
+    text-shadow:
+      0 1px 0 #e8d5b7,
+      0 2px 0 #d4b896,
+      0 3px 0 #b89968,
+      0 4px 6px rgba(0,0,0,0.6),
+      0 0 20px rgba(212, 175, 55, 0.3);
+    /* Переливающаяся золотая окантовка */
+    -webkit-text-stroke: 1px transparent;
+    position: relative;
+  }
 
-        .section-title {
-            font-family: 'Didot', 'Bodoni MT', serif;
-            font-size: 24px;
-            font-weight: bold;
-            color: #FFD700;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #D4AF37;
-            padding-bottom: 10px;
-        }
+  .lux-text::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0; top: 0;
+    background: linear-gradient(
+      90deg,
+      #D4AF37 0%,
+      #FFF8DC 25%,
+      #FFD700 50%,
+      #FFF8DC 75%,
+      #D4AF37 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0;
+    animation: shimmer 3s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
 
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
 
-        input[type="text"], input[type="date"] {
-            flex: 1;
-            padding: 12px;
-            background: #1a1a1a;
-            border: 2px solid #D4AF37;
-            color: #f7e7ce;
-            font-size: 16px;
-            border-radius: 5px;
-        }
+  /* === ЗАГОЛОВОК === */
+  .logo {
+    text-align: center;
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: 6px;
+    margin-bottom: 8px;
+  }
 
-        button {
-            padding: 12px 20px;
-            background: #E10600;
-            border: none;
-            color: white;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: #D4AF37;
+    margin-bottom: 30px;
+    font-style: italic;
+  }
 
-        button:hover {
-            background: #FFD700;
-            color: #0a0a0a;
-        }
+  /* === СЕКЦИИ === */
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin: 25px 0 15px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+  }
 
-        .voice-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
+  /* === ВВОД === */
+  .input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
 
-        .voice-btn.recording {
-            animation: pulse 1.5s infinite;
-        }
+  .row {
+    display: flex;
+    gap: 8px;
+  }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7);
-            }
-            70% {
-                transform: scale(1.1);
-                box-shadow: 0 0 0 20px rgba(225, 6, 0, 0);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(225, 6, 0, 0);
-            }
-        }
+  input[type="text"], input[type="date"] {
+    flex: 1;
+    padding: 14px 12px;
+    background: rgba(26, 26, 26, 0.8);
+    border: 1px solid #D4AF37;
+    color: #f5e6d3;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    border-radius: 4px;
+    outline: none;
+    min-width: 0;
+  }
 
-        .task-list {
-            list-style: none;
-        }
+  input[type="text"]::placeholder { color: #8a7a5a; }
 
-        .task-item {
-            background: #1a1a1a;
-            border: 2px solid #D4AF37;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+  input:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  }
 
-        .task-item.urgent {
-            border-color: #E10600;
-        }
+  /* === КНОПКИ === */
+  .btn {
+    background: #E10600;
+    color: #fff;
+    border: none;
+    padding: 14px 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+  }
 
-        .task-text {
-            flex: 1;
-        }
+  .btn:hover, .btn:active {
+    background: #FFD700;
+    color: #0a0a0a;
+    transform: translateY(-1px);
+  }
 
-        .task-date {
-            color: #D4AF37;
-            font-size: 14px;
-            margin-left: 10px;
-        }
+  .btn-full { width: 100%; }
 
-        .delete-btn {
-            background: #E10600;
-            padding: 8px 12px;
-            font-size: 14px;
-        }
+  .voice-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 22px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #E10600;
+    box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7);
+  }
 
-        .delete-btn:hover {
-            background: #FFD700;
-            color: #0a0a0a;
-        }
-    </style>
+  .voice-btn.recording {
+    animation: pulse-red 1.4s infinite;
+  }
+
+  @keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.8); }
+    70% { box-shadow: 0 0 0 18px rgba(225, 6, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0); }
+  }
+
+  /* === ЗАДАЧИ === */
+  .task-list { list-style: none; }
+
+  .task {
+    background: rgba(26, 26, 26, 0.7);
+    border: 1px solid #D4AF37;
+    border-left: 3px solid #D4AF37;
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s ease;
+  }
+
+  .task.urgent {
+    border-color: #E10600;
+    border-left: 3px solid #E10600;
+    background: rgba(40, 10, 10, 0.6);
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .task-text {
+    flex: 1;
+    font-size: 16px;
+    color: #f5e6d3;
+    word-break: break-word;
+  }
+
+  .task.done .task-text {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+
+  .task-date {
+    font-size: 12px;
+    color: #D4AF37;
+    white-space: nowrap;
+    font-style: italic;
+  }
+
+  .task-btn {
+    background: transparent;
+    border: 1px solid #D4AF37;
+    color: #D4AF37;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .task-btn:hover {
+    background: #D4AF37;
+    color: #0a0a0a;
+  }
+
+  .task-btn.del {
+    border-color: #E10600;
+    color: #E10600;
+  }
+
+  .task-btn.del:hover {
+    background: #E10600;
+    color: #fff;
+  }
+
+  .empty {
+    text-align: center;
+    color: #5a4a2a;
+    font-style: italic;
+    padding: 20px;
+    font-size: 14px;
+  }
+
+  /* === АНИМАЦИЯ ГУБ ВНИЗУ === */
+  .lips-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0) 100%);
+  }
+
+  .lips {
+    width: 90px;
+    height: 55px;
+    position: relative;
+    animation: kiss 2.8s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px rgba(225, 6, 0, 0.5));
+  }
+
+  .lips svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes kiss {
+    0%, 100% {
+      transform: scale(1) rotate(0deg);
+    }
+    15% {
+      transform: scale(1.08) rotate(-2deg);
+    }
+    30% {
+      transform: scale(0.82) rotate(0deg);
+    }
+    45% {
+      transform: scale(1) rotate(0deg);
+    }
+    60% {
+      transform: scale(1.05);
+    }
+    75% {
+      transform: scale(0.95);
+    }
+  }
+
+  /* Блеск на губах */
+  .lips::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 20%;
+    width: 25%;
+    height: 20%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: gloss 2.8s ease-in-out infinite;
+  }
+
+  @keyframes gloss {
+    0%, 100% { opacity: 0.7; }
+    30% { opacity: 1; }
+  }
+
+  /* Сердечко при "чмоке" */
+  .heart {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    color: #E10600;
+    opacity: 0;
+    animation: heartFloat 2.8s ease-in-out infinite;
+  }
+
+  @keyframes heartFloat {
+    0%, 25%, 100% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+    30% { opacity: 1; transform: translate(-50%, -10px) scale(1); }
+    60% { opacity: 0; transform: translate(-50%, -30px) scale(0.8); }
+  }
+
+  /* === АДАПТИВ === */
+  @media (max-width: 480px) {
+    .logo { font-size: 42px; letter-spacing: 4px; }
+    .section-title { font-size: 18px; }
+    body { padding: 15px 14px 130px 14px; }
+    .btn { padding: 12px 14px; font-size: 12px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>PRIVÉ</h1>
-        <p class="subtitle">Твои дела</p>
 
-        <h2 class="section-title">СЕГОДНЯ</h2>
-        <div class="input-group">
-            <input type="text" id="taskInput" placeholder="Новая задача">
-            <input type="date" id="dateInput">
-            <button id="addBtn">Добавить</button>
-            <button class="voice-btn" id="voiceBtn"></button>
-        </div>
+  <h1 class="logo lux-text" data-text="PRIVÉ">PRIVÉ</h1>
+  <p class="subtitle">Personal Secretary</p>
 
-        <ul class="task-list" id="todayList"></ul>
+  <h2 class="section-title lux-text" data-text="СЕГОДНЯ">СЕГОДНЯ</h2>
 
-        <h2 class="section-title">ДРУГИЕ ЗАДАЧИ</h2>
-        <ul class="task-list" id="otherList"></ul>
+  <div class="input-wrap">
+    <div class="row">
+      <input type="text" id="taskInput" placeholder="Надиктуй или напиши задачу...">
     </div>
+    <div class="row">
+      <input type="date" id="dateInput">
+      <button class="btn btn-full" id="addBtn">Добавить</button>
+      <button class="voice-btn" id="voiceBtn" title="Диктовка">🎙</button>
+    </div>
+  </div>
 
-    <script>
-        const taskInput = document.getElementById('taskInput');
-        const dateInput = document.getElementById('dateInput');
-        const addBtn = document.getElementById('addBtn');
-        const voiceBtn = document.getElementById('voiceBtn');
-        const todayList = document.getElementById('todayList');
-        const otherList = document.getElementById('otherList');
+  <ul class="task-list" id="todayList"></ul>
 
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        let isRecording = false;
-        let recognition = null;
+  <h2 class="section-title lux-text" data-text="ДРУГИЕ ЗАДАЧИ">ДРУГИЕ ЗАДАЧИ</h2>
+  <ul class="task-list" id="otherList"></ul>
 
-        // Установить сегодняшнюю дату по умолчанию
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.value = today;
+  <!-- Анимация губ внизу -->
+  <div class="lips-container">
+    <div class="lips">
+      <span class="heart">♥</span>
+      <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="lipGrad" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#ff2a3a"/>
+            <stop offset="50%" stop-color="#E10600"/>
+            <stop offset="100%" stop-color="#8b0000"/>
+          </radialGradient>
+        </defs>
+        <!-- Верхняя губа -->
+        <path d="M 10 30 Q 25 10 40 22 Q 50 15 60 22 Q 75 10 90 30 Q 75 25 50 28 Q 25 25 10 30 Z"
+              fill="url(#lipGrad)" stroke="#5a0000" stroke-width="0.5"/>
+        <!-- Нижняя губа -->
+        <path d="M 10 30 Q 25 55 50 55 Q 75 55 90 30 Q 75 35 50 33 Q 25 35 10 30 Z"
+              fill="url(#lipGrad)" stroke="#5a0000" stroke-width="0.5"/>
+        <!-- Линия между губами -->
+        <path d="M 12 30 Q 30 32 50 30 Q 70 32 88 30"
+              fill="none" stroke="#3a0000" stroke-width="1.2"/>
+      </svg>
+    </div>
+  </div>
 
-        function saveTasks() {
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            renderTasks();
-        }
+<script>
+  const taskInput = document.getElementById('taskInput');
+  const dateInput = document.getElementById('dateInput');
+  const addBtn = document.getElementById('addBtn');
+  const voiceBtn = document.getElementById('voiceBtn');
+  const todayList = document.getElementById('todayList');
+  const otherList = document.getElementById('otherList');
 
-        function renderTasks() {
-            todayList.innerHTML = '';
-            otherList.innerHTML = '';
+  let tasks = JSON.parse(localStorage.getItem('priveTasks') || '[]');
+  let isRecording = false;
+  let recognition = null;
 
-            const todayTasks = tasks.filter(task => task.date === today || !task.date);
-            const otherTasks = tasks.filter(task => task.date !== today && task.date);
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.value = today;
 
-            todayTasks.forEach(task => {
-                const li = document.createElement('li');
-                li.className = 'task-item urgent';
-                li.innerHTML = `
-                    <span class="task-text">${task.text}</span>
-                    <span class="task-date">${task.date || 'Сегодня'}</span>
-                    <button class="delete-btn" onclick="deleteTask(${task.id})">Удалить</button>
-                `;
-                todayList.appendChild(li);
-            });
+  function save() {
+    localStorage.setItem('priveTasks', JSON.stringify(tasks));
+    render();
+  }
 
-            otherTasks.forEach(task => {
-                const li = document.createElement('li');
-                li.className = 'task-item';
-                li.innerHTML = `
-                    <span class="task-text">${task.text}</span>
-                    <span class="task-date">${task.date}</span>
-                    <button class="delete-btn" onclick="deleteTask(${task.id})">Удалить</button>
-                `;
-                otherList.appendChild(li);
-            });
-        }
+  function render() {
+    todayList.innerHTML = '';
+    otherList.innerHTML = '';
 
-        function addTask() {
-            const text = taskInput.value.trim();
-            const date = dateInput.value;
+    const todayTasks = tasks.filter(t => t.date === today || !t.date);
+    const otherTasks = tasks.filter(t => t.date && t.date !== today)
+                            .sort((a, b) => a.date.localeCompare(b.date));
 
-            if (text) {
-                const task = {
-                    id: Date.now(),
-                    text: text,
-                    date: date
-                };
+    if (todayTasks.length === 0) {
+      todayList.innerHTML = '<li class="empty">Пока пусто. Надиктуй первую задачу </li>';
+    } else {
+      todayTasks.forEach((t, i) => {
+        todayList.appendChild(createTaskEl(t, tasks.indexOf(t), true));
+      });
+    }
 
-                tasks.push(task);
-                taskInput.value = '';
-                saveTasks();
-            }
-        }
+    if (otherTasks.length === 0) {
+      otherList.innerHTML = '<li class="empty">Нет запланированных задач</li>';
+    } else {
+      otherTasks.forEach(t => {
+        otherList.appendChild(createTaskEl(t, tasks.indexOf(t), false));
+      });
+    }
+  }
 
-        function deleteTask(id) {
-            tasks = tasks.filter(task => task.id !== id);
-            saveTasks();
-        }
+  function createTaskEl(t, idx, isUrgent) {
+    const li = document.createElement('li');
+    li.className = 'task' + (isUrgent ? ' urgent' : '') + (t.done ? ' done' : '');
 
-        function startVoiceRecognition() {
-            if (!('webkitSpeechRecognition' in window)) {
-                alert('Голосовой ввод не поддерживается в этом браузере');
-                return;
-            }
+    const span = document.createElement('span');
+    span.className = 'task-text';
+    span.textContent = t.text;
 
-            if (!recognition) {
-                recognition = new webkitSpeechRecognition();
-                recognition.lang = 'ru-RU';
-                recognition.continuous = false;
-                recognition.interimResults = false;
+    const date = document.createElement('span');
+    date.className = 'task-date';
+    date.textContent = t.date ? formatDate(t.date) : 'сегодня';
 
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript;
-                    taskInput.value = transcript;
-                    stopVoiceRecognition();
-                };
+    const check = document.createElement('button');
+    check.className = 'task-btn';
+    check.textContent = t.done ? '' : '✓';
+    check.onclick = () => { tasks[idx].done = !tasks[idx].done; save(); };
 
-                recognition.onerror = function(event) {
-                    console.error('Ошибка голосового ввода:', event.error);
-                    stopVoiceRecognition();
-                };
-            }
+    const del = document.createElement('button');
+    del.className = 'task-btn del';
+    del.textContent = '';
+    del.onclick = () => { tasks.splice(idx, 1); save(); };
 
-            recognition.start();
-            isRecording = true;
-            voiceBtn.classList.add('recording');
-        }
+    li.append(span, date, check, del);
+    return li;
+  }
 
-        function stopVoiceRecognition() {
-            if (recognition) {
-                recognition.stop();
-            }
-            isRecording = false;
-            voiceBtn.classList.remove('recording');
-        }
+  function formatDate(d) {
+    const date = new Date(d);
+    const opts = { day: 'numeric', month: 'short' };
+    return date.toLocaleDateString('ru-RU', opts);
+  }
 
-        addBtn.addEventListener('click', addTask);
-        voiceBtn.addEventListener('click', () => {
-            if (isRecording) {
-                stopVoiceRecognition();
-            } else {
-                startVoiceRecognition();
-            }
-        });
+  function addTask(text) {
+    const value = typeof text === 'string' ? text : taskInput.value.trim();
+    if (!value) return;
+    tasks.push({
+      text: value,
+      date: dateInput.value || today,
+      done: false,
+      id: Date.now()
+    });
+    taskInput.value = '';
+    save();
+  }
 
-        taskInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                addTask();
-            }
-        });
+  function startVoice() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      alert('Голосовой ввод не поддерживается в этом браузере. Используй Safari.');
+      return;
+    }
+    if (!recognition) {
+      recognition = new SR();
+      recognition.lang = 'ru-RU';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.onresult = e => {
+        const text = e.results[0][0].transcript;
+        taskInput.value = text;
+        stopVoice();
+        // Автодобавление через 1 сек, если пользователь не начал редактировать
+        setTimeout(() => {
+          if (taskInput.value === text) addTask(text);
+        }, 1200);
+      };
+      recognition.onerror = e => {
+        console.error(e.error);
+        stopVoice();
+      };
+      recognition.onend = () => stopVoice();
+    }
+    recognition.start();
+    isRecording = true;
+    voiceBtn.classList.add('recording');
+    voiceBtn.textContent = '';
+  }
 
-        renderTasks();
-    </script>
+  function stopVoice() {
+    if (recognition) {
+      try { recognition.stop(); } catch(e) {}
+    }
+    isRecording = false;
+    voiceBtn.classList.remove('recording');
+    voiceBtn.textContent = '🎙';
+  }
+
+  addBtn.addEventListener('click', () => addTask());
+  voiceBtn.addEventListener('click', () => {
+    if (isRecording) stopVoice();
+    else startVoice();
+  });
+
+  taskInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') addTask();
+  });
+
+  // Регистрация Service Worker для офлайн-работы
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      self.addEventListener('install', e => self.skipWaiting());
+      self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+      self.addEventListener('fetch', e => {
+        e.respondWith(
+          caches.open('prive-v1').then(cache =>
+            cache.match(e.request).then(r => r || fetch(e.request).then(resp => {
+              cache.put(e.request, resp.clone());
+              return resp;
+            }).catch(() => cache.match('/prive-ios-/')))
+          )
+        );
+      });
+    `;
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(() => {});
+  }
+
+  render();
+</script>
 </body>
 </html>
