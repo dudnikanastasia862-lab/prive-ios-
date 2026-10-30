@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="PRIVÉ">
-<link rel="apple-touch-icon" href="icon.PNG">
-<link rel="icon" href="icon.PNG">
+<link rel="apple-touch-icon" href="icon.PNG?v=3">
+<link rel="icon" href="icon.PNG?v=3">
 <title>PRIVÉ</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@500;700&display=swap');
@@ -24,7 +24,7 @@
   }
 
   body {
-    padding: 20px 18px 100px 18px;
+    padding: 20px 18px 180px 18px;
     max-width: 600px;
     margin: 0 auto;
   }
@@ -237,7 +237,6 @@
     font-size: 14px;
   }
 
-  /* === НИЖНЕЕ МЕНЮ ВКЛАДОК === */
   .tab-bar {
     position: fixed;
     bottom: 0;
@@ -279,10 +278,9 @@
     display: block;
   }
 
-  /* === ОГРОМНЫЕ ГУБЫ В ПРАВОМ НИЖНЕМ УГЛУ === */
   .lips-fab {
     position: fixed;
-    bottom: 60px;
+    bottom: 140px;
     right: -10px;
     font-size: 160px;
     line-height: 1;
@@ -305,7 +303,6 @@
     75% { transform: rotate(-28deg) scale(1.08); }
   }
 
-  /* === ЛЕТАЮЩИЕ СЕРДЕЧКИ И ГУБКИ === */
   .floater {
     position: fixed;
     pointer-events: none;
@@ -368,7 +365,6 @@
     75% { content: '...'; }
   }
 
-  /* === СПИСКИ === */
   .list-card {
     background: rgba(26, 26, 26, 0.7);
     border: 1px solid #D4AF37;
@@ -377,6 +373,7 @@
     margin-bottom: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
   }
 
   .list-card:hover {
@@ -422,12 +419,45 @@
     color: #0a0a0a;
   }
 
+  /* === ЗОЛОТЫЕ УКРАШЕНИЯ ВНИЗУ === */
+  .jewelry-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    pointer-events: none;
+    z-index: 80;
+    overflow: hidden;
+  }
+
+  .jewelry {
+    position: absolute;
+    font-size: 32px;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+    animation: sparkle 2s ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 0.6;
+      transform: scale(1) rotate(var(--rot));
+      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.15) rotate(var(--rot));
+      filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1));
+    }
+  }
+
   @media (max-width: 480px) {
     .logo { font-size: 42px; letter-spacing: 4px; }
     .section-title { font-size: 18px; }
-    body { padding: 15px 14px 100px 14px; }
+    body { padding: 15px 14px 180px 14px; }
     .btn { padding: 12px 14px; font-size: 12px; }
-    .lips-fab { font-size: 130px; bottom: 50px; right: -15px; }
+    .lips-fab { font-size: 130px; bottom: 130px; right: -15px; }
+    .jewelry { font-size: 26px; }
   }
 </style>
 </head>
@@ -436,7 +466,6 @@
   <h1 class="logo lux-text">PRIVÉ</h1>
   <p class="subtitle">Personal Secretary</p>
 
-  <!-- ВКЛАДКА ЗАДАЧИ -->
   <div class="tab-content active" id="tabTasks">
     <h2 class="section-title lux-text">СЕГОДНЯ</h2>
 
@@ -456,7 +485,6 @@
     <ul class="task-list" id="otherList"></ul>
   </div>
 
-  <!-- ВКЛАДКА СПИСКИ -->
   <div class="tab-content" id="tabLists">
     <div id="listsOverview">
       <h2 class="section-title lux-text">МОИ СПИСКИ</h2>
@@ -486,14 +514,15 @@
 
   <div class="lips-fab" id="lipsFab">💋</div>
 
-  <!-- НИЖНЕЕ МЕНЮ -->
+  <!-- Золотые украшения внизу -->
+  <div class="jewelry-container" id="jewelryContainer"></div>
+
   <div class="tab-bar">
     <button class="tab-btn active" data-tab="tabTasks">Задачи</button>
     <button class="tab-btn" data-tab="tabLists">Списки</button>
   </div>
 
 <script>
-  // === ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ===
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
 
@@ -506,7 +535,6 @@
     });
   });
 
-  // === ЗАДАЧИ ===
   const taskInput = document.getElementById('taskInput');
   const addBtn = document.getElementById('addBtn');
   const voiceBtn = document.getElementById('voiceBtn');
@@ -515,6 +543,7 @@
   const otherList = document.getElementById('otherList');
   const voiceStatus = document.getElementById('voiceStatus');
   const voiceStatusText = document.getElementById('voiceStatusText');
+  const jewelryContainer = document.getElementById('jewelryContainer');
 
   let tasks = JSON.parse(localStorage.getItem('priveTasks') || '[]');
   let lists = JSON.parse(localStorage.getItem('priveLists') || '[]');
@@ -523,6 +552,36 @@
   let currentListId = null;
 
   const today = new Date().toISOString().split('T')[0];
+
+  // === ЗОЛОТЫЕ УКРАШЕНИЯ ===
+  const jewelryEmojis = ['💍', '👑', '💎', '✨', '📿', '🏆', '⚜️', '💫', '🌟', '⭐'];
+  
+  function createJewelry() {
+    const count = 15 + Math.floor(Math.random() * 5); // 15-20 украшений
+    
+    for (let i = 0; i < count; i++) {
+      const jewelry = document.createElement('div');
+      jewelry.className = 'jewelry';
+      jewelry.textContent = jewelryEmojis[Math.floor(Math.random() * jewelryEmojis.length)];
+      
+      // Случайная позиция внизу экрана
+      const left = Math.random() * 100;
+      const bottom = Math.random() * 80;
+      const rotation = (Math.random() - 0.5) * 120; // -60 до +60 градусов
+      const size = 24 + Math.random() * 20; // 24-44px
+      const delay = Math.random() * 2; // задержка анимации
+      
+      jewelry.style.left = left + '%';
+      jewelry.style.bottom = bottom + 'px';
+      jewelry.style.setProperty('--rot', rotation + 'deg');
+      jewelry.style.fontSize = size + 'px';
+      jewelry.style.animationDelay = delay + 's';
+      
+      jewelryContainer.appendChild(jewelry);
+    }
+  }
+  
+  createJewelry();
 
   function beep(frequency = 800, duration = 150, volume = 0.3) {
     try {
@@ -549,20 +608,20 @@
     el.textContent = type === 'heart' ? '♥' : '💋';
 
     const startX = window.innerWidth - 80;
-    const startY = window.innerHeight - 120;
+    const startY = window.innerHeight - 200;
     el.style.left = startX + 'px';
     el.style.top = startY + 'px';
 
     const upwardBias = -Math.PI / 2;
-    const finalAngle = upwardBias + (Math.random() - 0.5) * Math.PI * 1.5;
+    const finalAngle = upwardBias + (Math.random() - 0.5) * Math.PI * 1.8;
     
-    const distance = 300 + Math.random() * 500;
+    const distance = 300 + Math.random() * 600;
     const dx1 = Math.cos(finalAngle) * distance * 0.2;
     const dy1 = Math.sin(finalAngle) * distance * 0.2;
-    const dx2 = Math.cos(finalAngle) * distance + (Math.random() - 0.5) * 300;
-    const dy2 = Math.sin(finalAngle) * distance - 150;
-    const r1 = (Math.random() - 0.5) * 90;
-    const r2 = r1 + (Math.random() - 0.5) * 180;
+    const dx2 = Math.cos(finalAngle) * distance + (Math.random() - 0.5) * 400;
+    const dy2 = Math.sin(finalAngle) * distance - 200;
+    const r1 = (Math.random() - 0.5) * 120;
+    const r2 = r1 + (Math.random() - 0.5) * 240;
 
     el.style.setProperty('--dx1', dx1 + 'px');
     el.style.setProperty('--dy1', dy1 + 'px');
@@ -573,24 +632,24 @@
 
     const duration = 4 + Math.random() * 3;
     el.style.animation = `floatRandom ${duration}s ease-out forwards`;
-    el.style.fontSize = (24 + Math.random() * 24) + 'px';
+    el.style.fontSize = (24 + Math.random() * 32) + 'px';
 
     document.body.appendChild(el);
     setTimeout(() => el.remove(), duration * 1000);
   }
 
   function launchKissBurst() {
-    const count = 8 + Math.floor(Math.random() * 5);
+    const count = 45 + Math.floor(Math.random() * 10); // 45-55 штук
     for (let i = 0; i < count; i++) {
       setTimeout(() => {
         spawnFloater(Math.random() > 0.4 ? 'heart' : 'kiss');
-      }, i * 100);
+      }, i * 30); // 30мс интервал
     }
   }
 
   setInterval(() => {
     if (!isRecording) spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss');
-  }, 2500);
+  }, 1500);
 
   lipsFab.addEventListener('click', () => {
     launchKissBurst();
@@ -829,7 +888,6 @@
     }
   });
 
-  // === СПИСКИ ===
   const addListBtn = document.getElementById('addListBtn');
   const listsList = document.getElementById('listsList');
   const listsOverview = document.getElementById('listsOverview');
@@ -880,7 +938,6 @@
         };
 
         li.append(title, count, del);
-        li.style.position = 'relative';
         li.onclick = () => openList(idx);
         listsList.appendChild(li);
       });
@@ -946,7 +1003,6 @@
     const value = typeof text === 'string' ? text : listItemInput.value.trim();
     if (!value || currentListId === null) return;
 
-    // Разбиваем по запятым или "и" для массового добавления
     const items = value.split(/[,;]| и /).map(s => s.trim()).filter(s => s);
     
     items.forEach(item => {
