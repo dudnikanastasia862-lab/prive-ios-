@@ -156,7 +156,7 @@
 
   .task-list, .list-list { list-style: none; }
 
-  .task, .list-item {
+  .task {
     background: rgba(26, 26, 26, 0.7);
     border: 1px solid #D4AF37;
     border-left: 3px solid #D4AF37;
@@ -180,14 +180,14 @@
     to { opacity: 1; transform: translateX(0); }
   }
 
-  .task-text, .list-text {
+  .task-text {
     flex: 1;
     font-size: 16px;
     color: #f5e6d3;
     word-break: break-word;
   }
 
-  .task.done .task-text, .list-item.done .list-text {
+  .task.done .task-text {
     text-decoration: line-through;
     opacity: 0.5;
   }
@@ -199,7 +199,7 @@
     font-style: italic;
   }
 
-  .task-btn, .list-btn {
+  .task-btn {
     background: transparent;
     border: 1px solid #D4AF37;
     color: #D4AF37;
@@ -214,17 +214,17 @@
     flex-shrink: 0;
   }
 
-  .task-btn:hover, .list-btn:hover {
+  .task-btn:hover {
     background: #D4AF37;
     color: #0a0a0a;
   }
 
-  .task-btn.del, .list-btn.del {
+  .task-btn.del {
     border-color: #E10600;
     color: #E10600;
   }
 
-  .task-btn.del:hover, .list-btn.del:hover {
+  .task-btn.del:hover {
     background: #E10600;
     color: #fff;
   }
@@ -270,17 +270,12 @@
     border-bottom: 2px solid #D4AF37;
   }
 
-  .tab-content {
-    display: none;
-  }
-
-  .tab-content.active {
-    display: block;
-  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
 
   .lips-fab {
     position: fixed;
-    bottom: 140px;
+    bottom: 160px;
     right: -10px;
     font-size: 160px;
     line-height: 1;
@@ -323,9 +318,7 @@
       opacity: 1;
       transform: translate(var(--dx1), var(--dy1)) scale(1) rotate(var(--r1));
     }
-    60% {
-      opacity: 0.8;
-    }
+    60% { opacity: 0.8; }
     100% {
       opacity: 0;
       transform: translate(var(--dx2), var(--dy2)) scale(0.3) rotate(var(--r2));
@@ -394,13 +387,8 @@
     font-style: italic;
   }
 
-  .list-detail {
-    display: none;
-  }
-
-  .list-detail.active {
-    display: block;
-  }
+  .list-detail { display: none; }
+  .list-detail.active { display: block; }
 
   .back-btn {
     background: transparent;
@@ -419,13 +407,13 @@
     color: #0a0a0a;
   }
 
-  /* === ЗОЛОТЫЕ УКРАШЕНИЯ ВНИЗУ === */
+  /* === РЕАЛИСТИЧНЫЕ ЗОЛОТЫЕ УКРАШЕНИЯ === */
   .jewelry-container {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 120px;
+    height: 160px;
     pointer-events: none;
     z-index: 80;
     overflow: hidden;
@@ -433,22 +421,22 @@
 
   .jewelry {
     position: absolute;
-    font-size: 32px;
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
-    animation: sparkle 2s ease-in-out infinite;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 0 6px rgba(255, 215, 0, 0.4));
+    animation: jewelryShine 3s ease-in-out infinite;
   }
 
-  @keyframes sparkle {
+  @keyframes jewelryShine {
     0%, 100% {
-      opacity: 0.6;
-      transform: scale(1) rotate(var(--rot));
-      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 0 6px rgba(255, 215, 0, 0.3));
     }
     50% {
-      opacity: 1;
-      transform: scale(1.15) rotate(var(--rot));
-      filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1));
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 0 12px rgba(255, 235, 120, 0.8));
     }
+  }
+
+  .jewelry svg {
+    width: 100%;
+    height: 100%;
   }
 
   @media (max-width: 480px) {
@@ -456,8 +444,7 @@
     .section-title { font-size: 18px; }
     body { padding: 15px 14px 180px 14px; }
     .btn { padding: 12px 14px; font-size: 12px; }
-    .lips-fab { font-size: 130px; bottom: 130px; right: -15px; }
-    .jewelry { font-size: 26px; }
+    .lips-fab { font-size: 130px; bottom: 150px; right: -15px; }
   }
 </style>
 </head>
@@ -514,7 +501,6 @@
 
   <div class="lips-fab" id="lipsFab">💋</div>
 
-  <!-- Золотые украшения внизу -->
   <div class="jewelry-container" id="jewelryContainer"></div>
 
   <div class="tab-bar">
@@ -553,34 +539,75 @@
 
   const today = new Date().toISOString().split('T')[0];
 
-  // === ЗОЛОТЫЕ УКРАШЕНИЯ ===
-  const jewelryEmojis = ['💍', '👑', '💎', '✨', '📿', '🏆', '⚜️', '💫', '🌟', '⭐'];
-  
-  function createJewelry() {
-    const count = 15 + Math.floor(Math.random() * 5); // 15-20 украшений
+  // === SVG ШАБЛОНЫ РЕАЛИСТИЧНЫХ УКРАШЕНИЙ ===
+  const goldGrad1 = `<defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B8860B"/><stop offset="30%" stop-color="#FFD700"/><stop offset="50%" stop-color="#FFF8DC"/><stop offset="70%" stop-color="#DAA520"/><stop offset="100%" stop-color="#8B6914"/></linearGradient></defs>`;
+  const goldGrad2 = `<defs><radialGradient id="g2" cx="40%" cy="30%"><stop offset="0%" stop-color="#FFFACD"/><stop offset="40%" stop-color="#FFD700"/><stop offset="100%" stop-color="#B8860B"/></radialGradient></defs>`;
+  const goldGrad3 = `<defs><linearGradient id="g3" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8B6914"/><stop offset="50%" stop-color="#FFD700"/><stop offset="100%" stop-color="#FFF8DC"/></linearGradient></defs>`;
+
+  const jewelryTemplates = [
+    // Кольцо с бриллиантом
+    (s) => `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${goldGrad1}<ellipse cx="50" cy="65" rx="30" ry="8" fill="url(#g1)" stroke="#8B6914" stroke-width="1"/><ellipse cx="50" cy="62" rx="30" ry="8" fill="none" stroke="#FFF8DC" stroke-width="0.5" opacity="0.6"/><path d="M 35 60 Q 35 40 50 35 Q 65 40 65 60" fill="url(#g1)" stroke="#8B6914" stroke-width="1"/><polygon points="50,20 55,30 50,35 45,30" fill="#E0FFFF" stroke="#B0E0E6" stroke-width="0.5"/><polygon points="50,20 55,30 50,35 45,30" fill="url(#g2)" opacity="0.3"/><circle cx="48" cy="26" r="1.5" fill="white" opacity="0.9"/></svg>`,
     
+    // Кулон-сердце на цепочке
+    (s) => `<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">${goldGrad2}<path d="M 10 10 Q 30 5 50 15 Q 70 5 90 10" fill="none" stroke="url(#g2)" stroke-width="2"/><path d="M 15 12 Q 30 8 50 17 Q 70 8 85 12" fill="none" stroke="#FFF8DC" stroke-width="0.5" opacity="0.5"/><line x1="50" y1="15" x2="50" y2="50" stroke="url(#g2)" stroke-width="1.5"/><path d="M 50 55 C 35 55 30 70 30 75 C 30 85 45 95 50 100 C 55 95 70 85 70 75 C 70 70 65 55 50 55 Z" fill="url(#g2)" stroke="#8B6914" stroke-width="1"/><ellipse cx="42" cy="70" rx="6" ry="10" fill="#FFFACD" opacity="0.4"/></svg>`,
+    
+    // Золотая цепочка (звенья)
+    (s) => `<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">${goldGrad3}${Array.from({length: 12}, (_, i) => {
+      const x = 10 + i * 16;
+      const y = i % 2 === 0 ? 20 : 35;
+      return `<ellipse cx="${x}" cy="${y}" rx="10" ry="6" fill="none" stroke="url(#g3)" stroke-width="3"/><ellipse cx="${x}" cy="${y-2}" rx="8" ry="3" fill="#FFF8DC" opacity="0.3"/>`;
+    }).join('')}</svg>`,
+    
+    // Браслет
+    (s) => `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${goldGrad1}<ellipse cx="60" cy="60" rx="50" ry="20" fill="none" stroke="url(#g1)" stroke-width="8"/><ellipse cx="60" cy="58" rx="50" ry="20" fill="none" stroke="#FFF8DC" stroke-width="1" opacity="0.5"/><ellipse cx="60" cy="62" rx="50" ry="20" fill="none" stroke="#8B6914" stroke-width="1"/><circle cx="30" cy="55" r="3" fill="#FFFACD"/><circle cx="60" cy="45" r="3" fill="#FFFACD"/><circle cx="90" cy="55" r="3" fill="#FFFACD"/></svg>`,
+    
+    // Серьга-капля
+    (s) => `<svg viewBox="0 0 60 120" xmlns="http://www.w3.org/2000/svg">${goldGrad2}<circle cx="30" cy="15" r="8" fill="url(#g2)" stroke="#8B6914" stroke-width="1"/><line x1="30" y1="23" x2="30" y2="50" stroke="url(#g2)" stroke-width="2"/><path d="M 30 50 Q 15 70 15 85 Q 15 105 30 110 Q 45 105 45 85 Q 45 70 30 50 Z" fill="url(#g2)" stroke="#8B6914" stroke-width="1"/><ellipse cx="25" cy="80" rx="5" ry="15" fill="#FFFACD" opacity="0.4"/></svg>`,
+    
+    // Кулон-подвеска круглая
+    (s) => `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">${goldGrad1}<path d="M 20 10 Q 50 5 80 10" fill="none" stroke="url(#g1)" stroke-width="2"/><line x1="50" y1="10" x2="50" y2="40" stroke="url(#g1)" stroke-width="1.5"/><circle cx="50" cy="70" r="30" fill="url(#g1)" stroke="#8B6914" stroke-width="1.5"/><circle cx="50" cy="70" r="25" fill="none" stroke="#FFF8DC" stroke-width="0.5" opacity="0.5"/><text x="50" y="78" text-anchor="middle" font-family="Playfair Display" font-size="24" fill="#8B6914" font-weight="bold">P</text></svg>`,
+    
+    // Кольцо простое
+    (s) => `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${goldGrad3}<ellipse cx="50" cy="60" rx="35" ry="12" fill="none" stroke="url(#g3)" stroke-width="10"/><ellipse cx="50" cy="58" rx="35" ry="12" fill="none" stroke="#FFF8DC" stroke-width="1.5" opacity="0.6"/><ellipse cx="50" cy="62" rx="35" ry="12" fill="none" stroke="#8B6914" stroke-width="1"/></svg>`,
+    
+    // Цепочка с кулоном-звездой
+    (s) => `<svg viewBox="0 0 150 130" xmlns="http://www.w3.org/2000/svg">${goldGrad2}<path d="M 10 15 Q 40 5 75 20 Q 110 5 140 15" fill="none" stroke="url(#g2)" stroke-width="2"/><line x1="75" y1="20" x2="75" y2="55" stroke="url(#g2)" stroke-width="1.5"/><polygon points="75,55 80,70 95,70 83,80 87,95 75,85 63,95 67,80 55,70 70,70" fill="url(#g2)" stroke="#8B6914" stroke-width="1"/><circle cx="75" cy="75" r="3" fill="#FFFACD"/></svg>`
+  ];
+
+  function createJewelry() {
+    const containerWidth = window.innerWidth;
+    const count = 25 + Math.floor(Math.random() * 8); // 25-32 украшения
+    
+    // Сортируем по "слоям" — сначала задний план, потом передний
+    const layers = [];
     for (let i = 0; i < count; i++) {
-      const jewelry = document.createElement('div');
-      jewelry.className = 'jewelry';
-      jewelry.textContent = jewelryEmojis[Math.floor(Math.random() * jewelryEmojis.length)];
-      
-      // Случайная позиция внизу экрана
-      const left = Math.random() * 100;
-      const bottom = Math.random() * 80;
-      const rotation = (Math.random() - 0.5) * 120; // -60 до +60 градусов
-      const size = 24 + Math.random() * 20; // 24-44px
-      const delay = Math.random() * 2; // задержка анимации
-      
-      jewelry.style.left = left + '%';
-      jewelry.style.bottom = bottom + 'px';
-      jewelry.style.setProperty('--rot', rotation + 'deg');
-      jewelry.style.fontSize = size + 'px';
-      jewelry.style.animationDelay = delay + 's';
-      
-      jewelryContainer.appendChild(jewelry);
+      layers.push({
+        template: jewelryTemplates[Math.floor(Math.random() * jewelryTemplates.length)],
+        size: 60 + Math.random() * 80, // 60-140px
+        left: Math.random() * (containerWidth - 20),
+        bottom: Math.random() * 100 - 20, // -20 до 80px от низа
+        rotation: (Math.random() - 0.5) * 180,
+        zIndex: Math.floor(Math.random() * 10),
+        delay: Math.random() * 3
+      });
     }
+    layers.sort((a, b) => a.zIndex - b.zIndex);
+    
+    layers.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'jewelry';
+      div.innerHTML = item.template(item.size);
+      div.style.width = item.size + 'px';
+      div.style.height = item.size + 'px';
+      div.style.left = item.left + 'px';
+      div.style.bottom = item.bottom + 'px';
+      div.style.transform = `rotate(${item.rotation}deg)`;
+      div.style.zIndex = item.zIndex;
+      div.style.animationDelay = item.delay + 's';
+      jewelryContainer.appendChild(div);
+    });
   }
-  
+
   createJewelry();
 
   function beep(frequency = 800, duration = 150, volume = 0.3) {
@@ -608,18 +635,18 @@
     el.textContent = type === 'heart' ? '♥' : '💋';
 
     const startX = window.innerWidth - 80;
-    const startY = window.innerHeight - 200;
+    const startY = window.innerHeight - 240;
     el.style.left = startX + 'px';
     el.style.top = startY + 'px';
 
     const upwardBias = -Math.PI / 2;
-    const finalAngle = upwardBias + (Math.random() - 0.5) * Math.PI * 1.8;
+    const finalAngle = upwardBias + (Math.random() - 0.5) * Math.PI * 2;
     
-    const distance = 300 + Math.random() * 600;
+    const distance = 300 + Math.random() * 700;
     const dx1 = Math.cos(finalAngle) * distance * 0.2;
     const dy1 = Math.sin(finalAngle) * distance * 0.2;
-    const dx2 = Math.cos(finalAngle) * distance + (Math.random() - 0.5) * 400;
-    const dy2 = Math.sin(finalAngle) * distance - 200;
+    const dx2 = Math.cos(finalAngle) * distance + (Math.random() - 0.5) * 500;
+    const dy2 = Math.sin(finalAngle) * distance - 250;
     const r1 = (Math.random() - 0.5) * 120;
     const r2 = r1 + (Math.random() - 0.5) * 240;
 
@@ -639,17 +666,22 @@
   }
 
   function launchKissBurst() {
-    const count = 45 + Math.floor(Math.random() * 10); // 45-55 штук
+    const count = 200 + Math.floor(Math.random() * 50); // 200-250 штук (в 5 раз больше!)
     for (let i = 0; i < count; i++) {
       setTimeout(() => {
         spawnFloater(Math.random() > 0.4 ? 'heart' : 'kiss');
-      }, i * 30); // 30мс интервал
+      }, i * 15); // 15мс интервал — очень быстрый поток
     }
   }
 
   setInterval(() => {
-    if (!isRecording) spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss');
-  }, 1500);
+    if (!isRecording) {
+      // Запускаем мини-залпы по 8-12 штук каждые 400мс
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss'), i * 40);
+      }
+    }
+  }, 400);
 
   lipsFab.addEventListener('click', () => {
     launchKissBurst();
@@ -924,7 +956,7 @@
         count.textContent = `${list.items.length} пунктов, выполнено: ${doneCount}`;
 
         const del = document.createElement('button');
-        del.className = 'list-btn del';
+        del.className = 'task-btn del';
         del.textContent = '×';
         del.style.position = 'absolute';
         del.style.right = '10px';
