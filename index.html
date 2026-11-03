@@ -24,11 +24,12 @@
   }
 
   body {
-    padding: 20px 18px 180px 18px;
+    padding: 20px 18px 100px 18px;
     max-width: 600px;
     margin: 0 auto;
   }
 
+  /* === 3D ЗОЛОТОЙ ТЕКСТ === */
   .lux-text {
     font-family: 'Playfair Display', 'Didot', 'Bodoni MT', serif;
     color: #f5e6d3;
@@ -38,7 +39,11 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shimmer 4s linear infinite;
-    text-shadow: 0 1px 0 #e8d5b7, 0 2px 0 #d4b896, 0 3px 0 #b89968, 0 4px 8px rgba(0,0,0,0.8);
+    text-shadow:
+      0 1px 0 #e8d5b7,
+      0 2px 0 #d4b896,
+      0 3px 0 #b89968,
+      0 4px 8px rgba(0,0,0,0.8);
     -webkit-text-stroke: 0.3px #D4AF37;
   }
 
@@ -53,6 +58,12 @@
     font-weight: 900;
     letter-spacing: 6px;
     margin-bottom: 8px;
+    animation: logoFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
   }
 
   .subtitle {
@@ -60,7 +71,7 @@
     font-size: 14px;
     letter-spacing: 4px;
     color: #D4AF37;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     font-style: italic;
   }
 
@@ -73,158 +84,194 @@
     border-bottom: 1px solid rgba(212, 175, 55, 0.4);
   }
 
-  .input-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 10px;
+  /* === КАРТОЧКИ КАТЕГОРИЙ === */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
   }
 
-  .row {
-    display: flex;
-    gap: 8px;
-  }
-
-  input[type="text"] {
-    flex: 1;
-    padding: 14px 12px;
-    background: rgba(26, 26, 26, 0.8);
-    border: 1px solid #D4AF37;
-    color: #f5e6d3;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    border-radius: 4px;
-    outline: none;
-    min-width: 0;
-  }
-
-  input[type="text"]::placeholder { color: #8a7a5a; }
-
-  input:focus {
-    border-color: #FFD700;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-  }
-
-  .btn {
-    background: #E10600;
-    color: #fff;
-    border: none;
-    padding: 14px 18px;
-    font-family: 'Playfair Display', serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    border-radius: 4px;
+  .category-card {
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(40, 30, 20, 0.8) 100%);
+    border: 2px solid #D4AF37;
+    border-radius: 8px;
+    padding: 20px 15px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: cardAppear 0.5s ease-out;
   }
 
-  .btn:hover, .btn:active {
-    background: #FFD700;
-    color: #0a0a0a;
-    transform: translateY(-1px);
+  @keyframes cardAppear {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
-  .btn-full { width: 100%; }
+  .category-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
 
-  .voice-btn {
-    width: 56px;
-    height: 56px;
+  .category-card:hover::before,
+  .category-card:active::before {
+    opacity: 1;
+  }
+
+  .category-card:hover,
+  .category-card:active {
+    transform: translateY(-5px) scale(1.02);
+    border-color: #FFD700;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+  }
+
+  .category-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f5e6d3;
+    margin-bottom: 8px;
+    word-break: break-word;
+  }
+
+  .category-count {
+    font-size: 12px;
+    color: #D4AF37;
+    font-style: italic;
+  }
+
+  .category-delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: 1px solid #E10600;
+    color: #E10600;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     padding: 0;
-    font-size: 26px;
-    flex-shrink: 0;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+  }
+
+  .category-delete:hover {
+    opacity: 1;
+    background: #E10600;
+    color: #fff;
+  }
+
+  .add-category-btn {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(255, 215, 0, 0.1) 100%);
+    border: 2px dashed #D4AF37;
+    border-radius: 8px;
+    padding: 20px 15px;
+    cursor: pointer;
+    transition: all 0.4s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #E10600;
-    border: 2px solid #fff;
-    box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7);
+    font-size: 32px;
+    color: #D4AF37;
   }
 
-  .voice-btn.recording {
-    animation: pulse-red 1.2s infinite;
-    background: #ff2a2a;
+  .add-category-btn:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(255, 215, 0, 0.2) 100%);
+    border-color: #FFD700;
+    transform: scale(1.05);
   }
 
-  @keyframes pulse-red {
-    0% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.9); }
-    70% { box-shadow: 0 0 0 20px rgba(225, 6, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0); }
+  /* === СПИСОК ТОВАРОВ === */
+  .items-list {
+    list-style: none;
+    margin-bottom: 20px;
   }
 
-  .task-list, .list-list { list-style: none; }
-
-  .task {
-    background: rgba(26, 26, 26, 0.7);
+  .item {
+    background: rgba(26, 26, 26, 0.8);
     border: 1px solid #D4AF37;
-    border-left: 3px solid #D4AF37;
-    border-radius: 4px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
+    border-left: 4px solid #D4AF37;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    animation: slideIn 0.3s ease;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: itemSlideIn 0.4s ease-out;
+    position: relative;
+    overflow: hidden;
   }
 
-  .task.urgent {
-    border-color: #E10600;
-    border-left: 3px solid #E10600;
+  @keyframes itemSlideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .item:hover {
+    transform: translateX(5px);
+    border-color: #FFD700;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+  }
+
+  .item.out-of-stock {
+    border-left-color: #E10600;
     background: rgba(40, 10, 10, 0.6);
+    opacity: 0.7;
   }
 
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
+  .item.out-of-stock .item-name {
+    text-decoration: line-through;
+    color: #8a7a5a;
   }
 
-  .task-text {
+  .item-name {
     flex: 1;
     font-size: 16px;
     color: #f5e6d3;
     word-break: break-word;
+    transition: all 0.3s ease;
   }
 
-  .task.done .task-text {
-    text-decoration: line-through;
-    opacity: 0.5;
-  }
-
-  .task-date {
-    font-size: 12px;
-    color: #D4AF37;
-    white-space: nowrap;
-    font-style: italic;
-  }
-
-  .task-btn {
+  .item-delete {
     background: transparent;
-    border: 1px solid #D4AF37;
-    color: #D4AF37;
-    width: 32px;
-    height: 32px;
+    border: 1px solid #E10600;
+    color: #E10600;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     padding: 0;
     font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.3s ease;
     flex-shrink: 0;
   }
 
-  .task-btn:hover {
-    background: #D4AF37;
-    color: #0a0a0a;
-  }
-
-  .task-btn.del {
-    border-color: #E10600;
-    color: #E10600;
-  }
-
-  .task-btn.del:hover {
+  .item-delete:hover {
+    opacity: 1;
     background: #E10600;
     color: #fff;
   }
@@ -233,173 +280,75 @@
     text-align: center;
     color: #5a4a2a;
     font-style: italic;
-    padding: 20px;
-    font-size: 14px;
-  }
-
-  .tab-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(10, 10, 10, 0.98);
-    border-top: 1px solid rgba(212, 175, 55, 0.4);
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    padding: 12px 0;
-    z-index: 90;
-  }
-
-  .tab-btn {
-    background: transparent;
-    border: none;
-    color: #8a7a5a;
-    font-family: 'Playfair Display', serif;
+    padding: 30px 20px;
     font-size: 16px;
+  }
+
+  /* === ФОРМА ДОБАВЛЕНИЯ === */
+  .input-wrap {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  input[type="text"] {
+    flex: 1;
+    padding: 14px 16px;
+    background: rgba(26, 26, 26, 0.8);
+    border: 1px solid #D4AF37;
+    color: #f5e6d3;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  input[type="text"]::placeholder { color: #8a7a5a; }
+
+  input[type="text"]:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+  }
+
+  .btn {
+    background: linear-gradient(135deg, #E10600 0%, #c00500 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 2px;
+    border-radius: 6px;
     cursor: pointer;
-    padding: 8px 16px;
     transition: all 0.3s ease;
     text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(225, 6, 0, 0.3);
   }
 
-  .tab-btn.active {
-    color: #D4AF37;
-    border-bottom: 2px solid #D4AF37;
-  }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  .lips-fab {
-    position: fixed;
-    bottom: 160px;
-    right: -10px;
-    font-size: 160px;
-    line-height: 1;
-    z-index: 100;
-    transform: rotate(-28deg);
-    transform-origin: center center;
-    animation: kiss 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    filter: drop-shadow(0 8px 25px rgba(225, 6, 0, 0.9));
-    cursor: pointer;
-    pointer-events: auto;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  @keyframes kiss {
-    0%, 100% { transform: rotate(-28deg) scale(1); }
-    18% { transform: rotate(-28deg) scale(1.15); }
-    38% { transform: rotate(-28deg) scale(0.6); }
-    55% { transform: rotate(-28deg) scale(0.65); }
-    75% { transform: rotate(-28deg) scale(1.08); }
-  }
-
-  .floater {
-    position: fixed;
-    pointer-events: none;
-    z-index: 50;
-    font-size: 32px;
-    will-change: transform, opacity;
-  }
-
-  .floater.heart { color: #E10600; text-shadow: 0 0 12px rgba(225, 6, 0, 0.9); }
-  .floater.kiss { color: #ff2a3a; filter: drop-shadow(0 0 8px rgba(225, 6, 0, 0.7)); }
-
-  @keyframes floatRandom {
-    0% {
-      opacity: 0;
-      transform: translate(0, 0) scale(0.2) rotate(0deg);
-    }
-    10% {
-      opacity: 1;
-      transform: translate(var(--dx1), var(--dy1)) scale(1) rotate(var(--r1));
-    }
-    60% { opacity: 0.8; }
-    100% {
-      opacity: 0;
-      transform: translate(var(--dx2), var(--dy2)) scale(0.3) rotate(var(--r2));
-    }
-  }
-
-  .voice-status {
-    position: fixed;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(225, 6, 0, 0.95);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    z-index: 200;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    box-shadow: 0 4px 20px rgba(225, 6, 0, 0.6);
-  }
-
-  .voice-status.show { opacity: 1; }
-
-  .voice-status .dots::after {
-    content: '';
-    animation: dots 1.5s steps(4, end) infinite;
-  }
-
-  @keyframes dots {
-    0% { content: ''; }
-    25% { content: '.'; }
-    50% { content: '..'; }
-    75% { content: '...'; }
-  }
-
-  .list-card {
-    background: rgba(26, 26, 26, 0.7);
-    border: 1px solid #D4AF37;
-    border-radius: 4px;
-    padding: 14px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-  }
-
-  .list-card:hover {
-    background: rgba(40, 30, 20, 0.8);
+  .btn:hover {
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+    color: #0a0a0a;
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
   }
 
-  .list-card-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #f5e6d3;
-    margin-bottom: 6px;
+  .btn:active {
+    transform: translateY(0);
   }
-
-  .list-card-count {
-    font-size: 12px;
-    color: #D4AF37;
-    font-style: italic;
-  }
-
-  .list-detail { display: none; }
-  .list-detail.active { display: block; }
 
   .back-btn {
     background: transparent;
     border: 1px solid #D4AF37;
     color: #D4AF37;
-    padding: 8px 16px;
-    border-radius: 4px;
+    padding: 10px 18px;
+    border-radius: 6px;
     font-family: 'Playfair Display', serif;
     font-size: 14px;
     cursor: pointer;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
   }
 
   .back-btn:hover {
@@ -407,44 +356,144 @@
     color: #0a0a0a;
   }
 
-  /* === РЕАЛИСТИЧНЫЕ ЗОЛОТЫЕ УКРАШЕНИЯ === */
-  .jewelry-container {
+  /* === КНОПКИ БЭКАПА === */
+  .backup-section {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 160px;
-    pointer-events: none;
-    z-index: 80;
-    overflow: hidden;
+    background: rgba(10, 10, 10, 0.98);
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+    padding: 12px 18px;
+    display: flex;
+    gap: 10px;
+    z-index: 100;
   }
 
-  .jewelry {
-    position: absolute;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 0 6px rgba(255, 215, 0, 0.4));
-    animation: jewelryShine 3s ease-in-out infinite;
+  .backup-btn {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(255, 215, 0, 0.1) 100%);
+    border: 1px solid #D4AF37;
+    color: #D4AF37;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: 'Playfair Display', serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
   }
 
-  @keyframes jewelryShine {
-    0%, 100% {
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 0 6px rgba(255, 215, 0, 0.3));
+  .backup-btn:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(255, 215, 0, 0.2) 100%);
+    border-color: #FFD700;
+    transform: translateY(-2px);
+  }
+
+  /* === МОДАЛКА БЭКАПА === */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .modal-overlay.show {
+    display: flex;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1f15 100%);
+    border: 2px solid #D4AF37;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    animation: modalAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes modalAppear {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(30px);
     }
-    50% {
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 0 12px rgba(255, 235, 120, 0.8));
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
     }
   }
 
-  .jewelry svg {
-    width: 100%;
-    height: 100%;
+  .modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
   }
+
+  .modal-text {
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.5;
+  }
+
+  .modal-btns {
+    display: flex;
+    gap: 10px;
+  }
+
+  .modal-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .modal-btn.primary {
+    background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+    color: #0a0a0a;
+    border: none;
+  }
+
+  .modal-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+  }
+
+  .modal-btn.secondary {
+    background: transparent;
+    border: 1px solid #D4AF37;
+    color: #D4AF37;
+  }
+
+  .modal-btn.secondary:hover {
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  .hidden { display: none; }
 
   @media (max-width: 480px) {
     .logo { font-size: 42px; letter-spacing: 4px; }
     .section-title { font-size: 18px; }
-    body { padding: 15px 14px 180px 14px; }
-    .btn { padding: 12px 14px; font-size: 12px; }
-    .lips-fab { font-size: 130px; bottom: 150px; right: -15px; }
+    body { padding: 15px 14px 100px 14px; }
+    .categories-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -453,631 +502,440 @@
   <h1 class="logo lux-text">PRIVÉ</h1>
   <p class="subtitle">Personal Secretary</p>
 
-  <div class="tab-content active" id="tabTasks">
-    <h2 class="section-title lux-text">СЕГОДНЯ</h2>
+  <!-- ЭКРАН КАТЕГОРИЙ -->
+  <div id="categoriesScreen">
+    <h2 class="section-title lux-text">КАТЕГОРИИ</h2>
+    <div class="categories-grid" id="categoriesGrid"></div>
+  </div>
+
+  <!-- ЭКРАН СПИСКА ТОВАРОВ -->
+  <div id="itemsScreen" class="hidden">
+    <button class="back-btn" id="backBtn">← Назад к категориям</button>
+    <h2 class="section-title lux-text" id="categoryTitle"></h2>
 
     <div class="input-wrap">
-      <div class="row">
-        <input type="text" id="taskInput" placeholder="Надиктуй или напиши задачу...">
-      </div>
-      <div class="row">
-        <button class="btn btn-full" id="addBtn">Добавить</button>
-        <button class="voice-btn" id="voiceBtn" title="Диктовка">🎙</button>
-      </div>
+      <input type="text" id="itemInput" placeholder="Название товара...">
+      <button class="btn" id="addItemBtn">+</button>
     </div>
 
-    <ul class="task-list" id="todayList"></ul>
+    <h3 class="section-title lux-text" style="font-size: 18px;">ЗАКОНЧИЛОСЬ</h3>
+    <ul class="items-list" id="outOfStockList"></ul>
 
-    <h2 class="section-title lux-text">ДРУГИЕ ЗАДАЧИ</h2>
-    <ul class="task-list" id="otherList"></ul>
+    <h3 class="section-title lux-text" style="font-size: 18px;">В НАЛИЧИИ</h3>
+    <ul class="items-list" id="inStockList"></ul>
   </div>
 
-  <div class="tab-content" id="tabLists">
-    <div id="listsOverview">
-      <h2 class="section-title lux-text">МОИ СПИСКИ</h2>
-      <button class="btn btn-full" id="addListBtn" style="margin-bottom: 20px;">+ Новый список</button>
-      <ul class="list-list" id="listsList"></ul>
-    </div>
+  <!-- КНОПКИ БЭКАПА -->
+  <div class="backup-section">
+    <button class="backup-btn" id="restoreBtn">Восстановить копию</button>
+  </div>
 
-    <div class="list-detail" id="listDetail">
-      <button class="back-btn" id="backToLists">← Назад к спискам</button>
-      <h2 class="section-title lux-text" id="listDetailTitle"></h2>
-      <div class="input-wrap">
-        <div class="row">
-          <input type="text" id="listItemInput" placeholder="Добавить пункт...">
-        </div>
-        <div class="row">
-          <button class="btn btn-full" id="addListItemBtn">Добавить</button>
-          <button class="voice-btn" id="listVoiceBtn" title="Диктовка">🎙</button>
-        </div>
+  <!-- МОДАЛКА БЭКАПА -->
+  <div class="modal-overlay" id="backupModal">
+    <div class="modal">
+      <h3 class="modal-title lux-text">РЕЗЕРВНАЯ КОПИЯ</h3>
+      <p class="modal-text">Прошло больше суток с последнего бэкапа. Сохраните данные, чтобы не потерять их.</p>
+      <div class="modal-btns">
+        <button class="modal-btn primary" id="downloadBackupBtn">Скачать бэкап</button>
+        <button class="modal-btn secondary" id="skipBackupBtn">Позже</button>
       </div>
-      <ul class="task-list" id="listDetailItems"></ul>
     </div>
   </div>
 
-  <div class="voice-status" id="voiceStatus">
-    <span id="voiceStatusText">Слушаю</span><span class="dots"></span>
-  </div>
-
-  <div class="lips-fab" id="lipsFab">💋</div>
-
-  <div class="jewelry-container" id="jewelryContainer"></div>
-
-  <div class="tab-bar">
-    <button class="tab-btn active" data-tab="tabTasks">Задачи</button>
-    <button class="tab-btn" data-tab="tabLists">Списки</button>
-  </div>
+  <!-- СКРЫТЫЙ INPUT ДЛЯ ЗАГРУЗКИ -->
+  <input type="file" id="fileInput" accept=".json" style="display: none;">
 
 <script>
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const tabContents = document.querySelectorAll('.tab-content');
+  // === INDEXEDDB ===
+  const DB_NAME = 'prive_db';
+  const DB_VERSION = 1;
+  let db;
 
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach(b => b.classList.remove('active'));
-      tabContents.forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  const taskInput = document.getElementById('taskInput');
-  const addBtn = document.getElementById('addBtn');
-  const voiceBtn = document.getElementById('voiceBtn');
-  const lipsFab = document.getElementById('lipsFab');
-  const todayList = document.getElementById('todayList');
-  const otherList = document.getElementById('otherList');
-  const voiceStatus = document.getElementById('voiceStatus');
-  const voiceStatusText = document.getElementById('voiceStatusText');
-  const jewelryContainer = document.getElementById('jewelryContainer');
-
-  let tasks = JSON.parse(localStorage.getItem('priveTasks') || '[]');
-  let lists = JSON.parse(localStorage.getItem('priveLists') || '[]');
-  let isRecording = false;
-  let recognition = null;
-  let currentListId = null;
-
-  const today = new Date().toISOString().split('T')[0];
-
-  // === SVG ШАБЛОНЫ РЕАЛИСТИЧНЫХ УКРАШЕНИЙ ===
-  const goldGrad1 = `<defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B8860B"/><stop offset="30%" stop-color="#FFD700"/><stop offset="50%" stop-color="#FFF8DC"/><stop offset="70%" stop-color="#DAA520"/><stop offset="100%" stop-color="#8B6914"/></linearGradient></defs>`;
-  const goldGrad2 = `<defs><radialGradient id="g2" cx="40%" cy="30%"><stop offset="0%" stop-color="#FFFACD"/><stop offset="40%" stop-color="#FFD700"/><stop offset="100%" stop-color="#B8860B"/></radialGradient></defs>`;
-  const goldGrad3 = `<defs><linearGradient id="g3" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8B6914"/><stop offset="50%" stop-color="#FFD700"/><stop offset="100%" stop-color="#FFF8DC"/></linearGradient></defs>`;
-
-  const jewelryTemplates = [
-    // Кольцо с бриллиантом
-    (s) => `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${goldGrad1}<ellipse cx="50" cy="65" rx="30" ry="8" fill="url(#g1)" stroke="#8B6914" stroke-width="1"/><ellipse cx="50" cy="62" rx="30" ry="8" fill="none" stroke="#FFF8DC" stroke-width="0.5" opacity="0.6"/><path d="M 35 60 Q 35 40 50 35 Q 65 40 65 60" fill="url(#g1)" stroke="#8B6914" stroke-width="1"/><polygon points="50,20 55,30 50,35 45,30" fill="#E0FFFF" stroke="#B0E0E6" stroke-width="0.5"/><polygon points="50,20 55,30 50,35 45,30" fill="url(#g2)" opacity="0.3"/><circle cx="48" cy="26" r="1.5" fill="white" opacity="0.9"/></svg>`,
-    
-    // Кулон-сердце на цепочке
-    (s) => `<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">${goldGrad2}<path d="M 10 10 Q 30 5 50 15 Q 70 5 90 10" fill="none" stroke="url(#g2)" stroke-width="2"/><path d="M 15 12 Q 30 8 50 17 Q 70 8 85 12" fill="none" stroke="#FFF8DC" stroke-width="0.5" opacity="0.5"/><line x1="50" y1="15" x2="50" y2="50" stroke="url(#g2)" stroke-width="1.5"/><path d="M 50 55 C 35 55 30 70 30 75 C 30 85 45 95 50 100 C 55 95 70 85 70 75 C 70 70 65 55 50 55 Z" fill="url(#g2)" stroke="#8B6914" stroke-width="1"/><ellipse cx="42" cy="70" rx="6" ry="10" fill="#FFFACD" opacity="0.4"/></svg>`,
-    
-    // Золотая цепочка (звенья)
-    (s) => `<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">${goldGrad3}${Array.from({length: 12}, (_, i) => {
-      const x = 10 + i * 16;
-      const y = i % 2 === 0 ? 20 : 35;
-      return `<ellipse cx="${x}" cy="${y}" rx="10" ry="6" fill="none" stroke="url(#g3)" stroke-width="3"/><ellipse cx="${x}" cy="${y-2}" rx="8" ry="3" fill="#FFF8DC" opacity="0.3"/>`;
-    }).join('')}</svg>`,
-    
-    // Браслет
-    (s) => `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${goldGrad1}<ellipse cx="60" cy="60" rx="50" ry="20" fill="none" stroke="url(#g1)" stroke-width="8"/><ellipse cx="60" cy="58" rx="50" ry="20" fill="none" stroke="#FFF8DC" stroke-width="1" opacity="0.5"/><ellipse cx="60" cy="62" rx="50" ry="20" fill="none" stroke="#8B6914" stroke-width="1"/><circle cx="30" cy="55" r="3" fill="#FFFACD"/><circle cx="60" cy="45" r="3" fill="#FFFACD"/><circle cx="90" cy="55" r="3" fill="#FFFACD"/></svg>`,
-    
-    // Серьга-капля
-    (s) => `<svg viewBox="0 0 60 120" xmlns="http://www.w3.org/2000/svg">${goldGrad2}<circle cx="30" cy="15" r="8" fill="url(#g2)" stroke="#8B6914" stroke-width="1"/><line x1="30" y1="23" x2="30" y2="50" stroke="url(#g2)" stroke-width="2"/><path d="M 30 50 Q 15 70 15 85 Q 15 105 30 110 Q 45 105 45 85 Q 45 70 30 50 Z" fill="url(#g2)" stroke="#8B6914" stroke-width="1"/><ellipse cx="25" cy="80" rx="5" ry="15" fill="#FFFACD" opacity="0.4"/></svg>`,
-    
-    // Кулон-подвеска круглая
-    (s) => `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">${goldGrad1}<path d="M 20 10 Q 50 5 80 10" fill="none" stroke="url(#g1)" stroke-width="2"/><line x1="50" y1="10" x2="50" y2="40" stroke="url(#g1)" stroke-width="1.5"/><circle cx="50" cy="70" r="30" fill="url(#g1)" stroke="#8B6914" stroke-width="1.5"/><circle cx="50" cy="70" r="25" fill="none" stroke="#FFF8DC" stroke-width="0.5" opacity="0.5"/><text x="50" y="78" text-anchor="middle" font-family="Playfair Display" font-size="24" fill="#8B6914" font-weight="bold">P</text></svg>`,
-    
-    // Кольцо простое
-    (s) => `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${goldGrad3}<ellipse cx="50" cy="60" rx="35" ry="12" fill="none" stroke="url(#g3)" stroke-width="10"/><ellipse cx="50" cy="58" rx="35" ry="12" fill="none" stroke="#FFF8DC" stroke-width="1.5" opacity="0.6"/><ellipse cx="50" cy="62" rx="35" ry="12" fill="none" stroke="#8B6914" stroke-width="1"/></svg>`,
-    
-    // Цепочка с кулоном-звездой
-    (s) => `<svg viewBox="0 0 150 130" xmlns="http://www.w3.org/2000/svg">${goldGrad2}<path d="M 10 15 Q 40 5 75 20 Q 110 5 140 15" fill="none" stroke="url(#g2)" stroke-width="2"/><line x1="75" y1="20" x2="75" y2="55" stroke="url(#g2)" stroke-width="1.5"/><polygon points="75,55 80,70 95,70 83,80 87,95 75,85 63,95 67,80 55,70 70,70" fill="url(#g2)" stroke="#8B6914" stroke-width="1"/><circle cx="75" cy="75" r="3" fill="#FFFACD"/></svg>`
-  ];
-
-  function createJewelry() {
-    const containerWidth = window.innerWidth;
-    const count = 25 + Math.floor(Math.random() * 8); // 25-32 украшения
-    
-    // Сортируем по "слоям" — сначала задний план, потом передний
-    const layers = [];
-    for (let i = 0; i < count; i++) {
-      layers.push({
-        template: jewelryTemplates[Math.floor(Math.random() * jewelryTemplates.length)],
-        size: 60 + Math.random() * 80, // 60-140px
-        left: Math.random() * (containerWidth - 20),
-        bottom: Math.random() * 100 - 20, // -20 до 80px от низа
-        rotation: (Math.random() - 0.5) * 180,
-        zIndex: Math.floor(Math.random() * 10),
-        delay: Math.random() * 3
-      });
-    }
-    layers.sort((a, b) => a.zIndex - b.zIndex);
-    
-    layers.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'jewelry';
-      div.innerHTML = item.template(item.size);
-      div.style.width = item.size + 'px';
-      div.style.height = item.size + 'px';
-      div.style.left = item.left + 'px';
-      div.style.bottom = item.bottom + 'px';
-      div.style.transform = `rotate(${item.rotation}deg)`;
-      div.style.zIndex = item.zIndex;
-      div.style.animationDelay = item.delay + 's';
-      jewelryContainer.appendChild(div);
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        db = request.result;
+        resolve(db);
+      };
+      
+      request.onupgradeneeded = (event) => {
+        const database = event.target.result;
+        
+        if (!database.objectStoreNames.contains('categories')) {
+          database.createObjectStore('categories', { keyPath: 'id', autoIncrement: true });
+        }
+        
+        if (!database.objectStoreNames.contains('items')) {
+          const itemStore = database.createObjectStore('items', { keyPath: 'id', autoIncrement: true });
+          itemStore.createIndex('categoryId', 'categoryId', { unique: false });
+        }
+        
+        if (!database.objectStoreNames.contains('settings')) {
+          database.createObjectStore('settings', { keyPath: 'key' });
+        }
+      };
     });
   }
 
-  createJewelry();
-
-  function beep(frequency = 800, duration = 150, volume = 0.3) {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.frequency.value = frequency;
-      osc.type = 'sine';
-      gain.gain.value = volume;
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + duration / 1000);
-    } catch(e) {}
+  function dbGetAll(storeName) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(storeName, 'readonly');
+      const store = transaction.objectStore(storeName);
+      const request = store.getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
   }
 
-  function vibrate(pattern) {
-    if (navigator.vibrate) navigator.vibrate(pattern);
+  function dbAdd(storeName, data) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      const request = store.add(data);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
   }
 
-  function spawnFloater(type) {
-    const el = document.createElement('div');
-    el.className = 'floater ' + type;
-    el.textContent = type === 'heart' ? '♥' : '💋';
+  function dbUpdate(storeName, data) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      const request = store.put(data);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
 
-    const startX = window.innerWidth - 80;
-    const startY = window.innerHeight - 240;
-    el.style.left = startX + 'px';
-    el.style.top = startY + 'px';
+  function dbDelete(storeName, id) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      const request = store.delete(id);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  }
 
-    const upwardBias = -Math.PI / 2;
-    const finalAngle = upwardBias + (Math.random() - 0.5) * Math.PI * 2;
+  function dbGetByIndex(storeName, indexName, value) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(storeName, 'readonly');
+      const store = transaction.objectStore(storeName);
+      const index = store.index(indexName);
+      const request = index.getAll(value);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  function dbGetSetting(key) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction('settings', 'readonly');
+      const store = transaction.objectStore('settings');
+      const request = store.get(key);
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  function dbSetSetting(key, value) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction('settings', 'readwrite');
+      const store = transaction.objectStore('settings');
+      const request = store.put({ key, value });
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  // === ИНИЦИАЛИЗАЦИЯ ===
+  let categories = [];
+  let items = [];
+  let currentCategoryId = null;
+
+  async function init() {
+    await openDB();
+    await loadData();
+    await checkBackup();
+    renderCategories();
+  }
+
+  async function loadData() {
+    categories = await dbGetAll('categories');
+    items = await dbGetAll('items');
     
-    const distance = 300 + Math.random() * 700;
-    const dx1 = Math.cos(finalAngle) * distance * 0.2;
-    const dy1 = Math.sin(finalAngle) * distance * 0.2;
-    const dx2 = Math.cos(finalAngle) * distance + (Math.random() - 0.5) * 500;
-    const dy2 = Math.sin(finalAngle) * distance - 250;
-    const r1 = (Math.random() - 0.5) * 120;
-    const r2 = r1 + (Math.random() - 0.5) * 240;
-
-    el.style.setProperty('--dx1', dx1 + 'px');
-    el.style.setProperty('--dy1', dy1 + 'px');
-    el.style.setProperty('--dx2', dx2 + 'px');
-    el.style.setProperty('--dy2', dy2 + 'px');
-    el.style.setProperty('--r1', r1 + 'deg');
-    el.style.setProperty('--r2', r2 + 'deg');
-
-    const duration = 4 + Math.random() * 3;
-    el.style.animation = `floatRandom ${duration}s ease-out forwards`;
-    el.style.fontSize = (24 + Math.random() * 32) + 'px';
-
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), duration * 1000);
-  }
-
-  function launchKissBurst() {
-    const count = 200 + Math.floor(Math.random() * 50); // 200-250 штук (в 5 раз больше!)
-    for (let i = 0; i < count; i++) {
-      setTimeout(() => {
-        spawnFloater(Math.random() > 0.4 ? 'heart' : 'kiss');
-      }, i * 15); // 15мс интервал — очень быстрый поток
-    }
-  }
-
-  setInterval(() => {
-    if (!isRecording) {
-      // Запускаем мини-залпы по 8-12 штук каждые 400мс
-      for (let i = 0; i < 10; i++) {
-        setTimeout(() => spawnFloater(Math.random() > 0.5 ? 'heart' : 'kiss'), i * 40);
+    if (categories.length === 0) {
+      // Создаём стартовые категории
+      const defaultCategories = ['Продукты', 'Бытовая химия', 'Автомобиль', 'Уют'];
+      for (const name of defaultCategories) {
+        await dbAdd('categories', { name });
       }
+      categories = await dbGetAll('categories');
     }
-  }, 400);
+  }
 
-  lipsFab.addEventListener('click', () => {
-    launchKissBurst();
-    vibrate(50);
-  });
-
-  function parseDateFromText(text) {
-    const lower = text.toLowerCase();
-    const todayDate = new Date();
+  async function checkBackup() {
+    const lastBackup = await dbGetSetting('lastBackup');
+    const now = Date.now();
     
-    if (lower.includes('завтра')) {
-      const d = new Date(todayDate); d.setDate(d.getDate() + 1);
-      return d.toISOString().split('T')[0];
+    if (!lastBackup || (now - lastBackup) > 24 * 60 * 60 * 1000) {
+      document.getElementById('backupModal').classList.add('show');
     }
-    if (lower.includes('послезавтра')) {
-      const d = new Date(todayDate); d.setDate(d.getDate() + 2);
-      return d.toISOString().split('T')[0];
+  }
+
+  // === РЕНДЕР КАТЕГОРИЙ ===
+  function renderCategories() {
+    const grid = document.getElementById('categoriesGrid');
+    grid.innerHTML = '';
+    
+    categories.forEach(cat => {
+      const catItems = items.filter(i => i.categoryId === cat.id);
+      const inStock = catItems.filter(i => !i.outOfStock).length;
+      
+      const card = document.createElement('div');
+      card.className = 'category-card';
+      card.innerHTML = `
+        <button class="category-delete" data-id="${cat.id}">×</button>
+        <div class="category-name lux-text">${cat.name}</div>
+        <div class="category-count">${inStock} в наличии</div>
+      `;
+      
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('category-delete')) {
+          deleteCategory(cat.id);
+        } else {
+          openCategory(cat.id);
+        }
+      });
+      
+      grid.appendChild(card);
+    });
+    
+    // Кнопка добавления категории
+    const addBtn = document.createElement('div');
+    addBtn.className = 'add-category-btn';
+    addBtn.textContent = '+';
+    addBtn.addEventListener('click', addCategory);
+    grid.appendChild(addBtn);
+  }
+
+  async function addCategory() {
+    const name = prompt('Название категории:');
+    if (name && name.trim()) {
+      await dbAdd('categories', { name: name.trim() });
+      await loadData();
+      renderCategories();
     }
-    const daysMatch = lower.match(/через\s+(\d+)\s+дн/);
-    if (daysMatch) {
-      const d = new Date(todayDate); d.setDate(d.getDate() + parseInt(daysMatch[1]));
-      return d.toISOString().split('T')[0];
-    }
-    const days = {'понедельник': 1, 'вторник': 2, 'среда': 3, 'среду': 3, 'четверг': 4, 'пятница': 5, 'пятницу': 5, 'суббота': 6, 'воскресенье': 0, 'воскресение': 0};
-    for (const [word, dayNum] of Object.entries(days)) {
-      if (lower.includes(word)) {
-        const d = new Date(todayDate);
-        const currentDay = d.getDay();
-        let daysUntil = dayNum - currentDay;
-        if (daysUntil <= 0) daysUntil += 7;
-        d.setDate(d.getDate() + daysUntil);
-        return d.toISOString().split('T')[0];
+  }
+
+  async function deleteCategory(id) {
+    if (confirm('Удалить категорию и все её товары?')) {
+      await dbDelete('categories', id);
+      const catItems = items.filter(i => i.categoryId === id);
+      for (const item of catItems) {
+        await dbDelete('items', item.id);
       }
-    }
-    return today;
-  }
-
-  function cleanTaskText(text) {
-    const lower = text.toLowerCase();
-    const wordsToRemove = ['завтра', 'послезавтра', 'сегодня', 'без даты', 'на сегодня'];
-    const daysWords = ['в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу', 'в воскресенье',
-                       'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу', 'воскресенье'];
-
-    let cleaned = text;
-    wordsToRemove.forEach(w => {
-      cleaned = cleaned.replace(new RegExp(w, 'gi'), '');
-    });
-    daysWords.forEach(w => {
-      cleaned = cleaned.replace(new RegExp(w, 'gi'), '');
-    });
-    cleaned = cleaned.replace(/через\s+\d+\s+дн[яей]?\s*/gi, '');
-    cleaned = cleaned.replace(/^\s*[,\s]+|[,\s]+$/g, '').trim();
-    return cleaned || text;
-  }
-
-  function addTask(text, customDate) {
-    const value = typeof text === 'string' ? text : taskInput.value.trim();
-    if (!value) return;
-
-    const date = customDate || parseDateFromText(value);
-    const cleanText = customDate ? value : cleanTaskText(value);
-
-    tasks.push({
-      text: cleanText,
-      date: date,
-      done: false,
-      id: Date.now()
-    });
-    taskInput.value = '';
-    saveTasks();
-
-    speak('Добавлено: ' + cleanText);
-  }
-
-  function speak(text) {
-    if ('speechSynthesis' in window) {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'ru-RU';
-      utter.rate = 1.1;
-      utter.pitch = 1;
-      window.speechSynthesis.speak(utter);
+      await loadData();
+      renderCategories();
     }
   }
 
-  function saveTasks() {
-    localStorage.setItem('priveTasks', JSON.stringify(tasks));
-    renderTasks();
+  // === РЕНДЕР ТОВАРОВ ===
+  async function openCategory(id) {
+    currentCategoryId = id;
+    const category = categories.find(c => c.id === id);
+    document.getElementById('categoryTitle').textContent = category.name;
+    document.getElementById('categoriesScreen').classList.add('hidden');
+    document.getElementById('itemsScreen').classList.remove('hidden');
+    renderItems();
   }
 
-  function renderTasks() {
-    todayList.innerHTML = '';
-    otherList.innerHTML = '';
+  function closeCategory() {
+    currentCategoryId = null;
+    document.getElementById('itemsScreen').classList.add('hidden');
+    document.getElementById('categoriesScreen').classList.remove('hidden');
+    document.getElementById('itemInput').value = '';
+    renderCategories();
+  }
 
-    const todayTasks = tasks.filter(t => t.date === today || !t.date);
-    const otherTasks = tasks.filter(t => t.date && t.date !== today)
-                            .sort((a, b) => a.date.localeCompare(b.date));
-
-    if (todayTasks.length === 0) {
-      todayList.innerHTML = '<li class="empty">Пока пусто. Надиктуй первую задачу</li>';
+  function renderItems() {
+    const catItems = items.filter(i => i.categoryId === currentCategoryId);
+    const outOfStock = catItems.filter(i => i.outOfStock);
+    const inStock = catItems.filter(i => !i.outOfStock);
+    
+    const outList = document.getElementById('outOfStockList');
+    const inList = document.getElementById('inStockList');
+    
+    outList.innerHTML = '';
+    inList.innerHTML = '';
+    
+    if (outOfStock.length === 0) {
+      outList.innerHTML = '<li class="empty">Всё в наличии</li>';
     } else {
-      todayTasks.forEach((t, i) => {
-        todayList.appendChild(createTaskEl(t, tasks.indexOf(t), true));
+      outOfStock.forEach(item => {
+        outList.appendChild(createItemEl(item));
       });
     }
-
-    if (otherTasks.length === 0) {
-      otherList.innerHTML = '<li class="empty">Нет запланированных задач</li>';
+    
+    if (inStock.length === 0) {
+      inList.innerHTML = '<li class="empty">Добавьте первый товар</li>';
     } else {
-      otherTasks.forEach(t => {
-        otherList.appendChild(createTaskEl(t, tasks.indexOf(t), false));
+      inStock.forEach(item => {
+        inList.appendChild(createItemEl(item));
       });
     }
   }
 
-  function createTaskEl(t, idx, isUrgent) {
+  function createItemEl(item) {
     const li = document.createElement('li');
-    li.className = 'task' + (isUrgent ? ' urgent' : '') + (t.done ? ' done' : '');
-
-    const span = document.createElement('span');
-    span.className = 'task-text';
-    span.textContent = t.text;
-
-    const date = document.createElement('span');
-    date.className = 'task-date';
-    date.textContent = t.date ? formatDate(t.date) : 'сегодня';
-
-    const check = document.createElement('button');
-    check.className = 'task-btn';
-    check.textContent = t.done ? '↩' : '✓';
-    check.onclick = () => { tasks[idx].done = !tasks[idx].done; saveTasks(); };
-
-    const del = document.createElement('button');
-    del.className = 'task-btn del';
-    del.textContent = '×';
-    del.onclick = () => { tasks.splice(idx, 1); saveTasks(); };
-
-    li.append(span, date, check, del);
+    li.className = 'item' + (item.outOfStock ? ' out-of-stock' : '');
+    li.innerHTML = `
+      <span class="item-name">${item.name}</span>
+      <button class="item-delete" data-id="${item.id}">×</button>
+    `;
+    
+    li.addEventListener('click', (e) => {
+      if (e.target.classList.contains('item-delete')) {
+        deleteItem(item.id);
+      } else {
+        toggleItem(item.id);
+      }
+    });
+    
     return li;
   }
 
-  function formatDate(d) {
-    const date = new Date(d);
-    const opts = { day: 'numeric', month: 'short' };
-    return date.toLocaleDateString('ru-RU', opts);
+  async function addItem() {
+    const input = document.getElementById('itemInput');
+    const name = input.value.trim();
+    if (!name || !currentCategoryId) return;
+    
+    await dbAdd('items', {
+      name,
+      categoryId: currentCategoryId,
+      outOfStock: false
+    });
+    
+    input.value = '';
+    await loadData();
+    renderItems();
   }
 
-  function showStatus(text) {
-    voiceStatusText.textContent = text;
-    voiceStatus.classList.add('show');
-  }
-
-  function hideStatus() {
-    voiceStatus.classList.remove('show');
-  }
-
-  function startVoice(targetInput, callback) {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) {
-      showStatus('Голосовой ввод не поддерживается');
-      setTimeout(hideStatus, 2000);
-      return;
+  async function toggleItem(id) {
+    const item = items.find(i => i.id === id);
+    if (item) {
+      item.outOfStock = !item.outOfStock;
+      await dbUpdate('items', item);
+      await loadData();
+      renderItems();
     }
+  }
 
-    recognition = new SR();
-    recognition.lang = 'ru-RU';
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
+  async function deleteItem(id) {
+    await dbDelete('items', id);
+    await loadData();
+    renderItems();
+  }
 
-    recognition.onstart = () => {
-      isRecording = true;
-      voiceBtn.classList.add('recording');
-      voiceBtn.textContent = '⏹';
-      showStatus('Слушаю');
-      vibrate([50, 30, 50]);
-      beep(880, 200, 0.3);
+  // === БЭКАП ===
+  async function downloadBackup() {
+    const data = {
+      categories: await dbGetAll('categories'),
+      items: await dbGetAll('items'),
+      timestamp: new Date().toISOString()
     };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `prive_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    await dbSetSetting('lastBackup', Date.now());
+    document.getElementById('backupModal').classList.remove('show');
+  }
 
-    recognition.onresult = e => {
-      const text = e.results[0][0].transcript;
-      targetInput.value = text;
-      stopVoice();
-      showStatus('Распознано');
-      setTimeout(() => {
-        if (callback) callback(text);
-        hideStatus();
-      }, 600);
-    };
+  function restoreBackup() {
+    document.getElementById('fileInput').click();
+  }
 
-    recognition.onerror = e => {
-      console.error('Speech error:', e.error);
-      showStatus('Ошибка: ' + e.error);
-      stopVoice();
-      setTimeout(hideStatus, 2000);
-    };
-
-    recognition.onend = () => {
-      if (isRecording) {
-        try { recognition.start(); } catch(e) { stopVoice(); }
+  document.getElementById('fileInput').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const data = JSON.parse(event.target.result);
+        
+        if (data.categories && data.items) {
+          // Очищаем текущие данные
+          const allCategories = await dbGetAll('categories');
+          for (const cat of allCategories) {
+            await dbDelete('categories', cat.id);
+          }
+          
+          const allItems = await dbGetAll('items');
+          for (const item of allItems) {
+            await dbDelete('items', item.id);
+          }
+          
+          // Восстанавливаем
+          for (const cat of data.categories) {
+            await dbAdd('categories', { name: cat.name });
+          }
+          
+          const newCategories = await dbGetAll('categories');
+          const catMap = new Map();
+          data.categories.forEach((oldCat, idx) => {
+            catMap.set(oldCat.id, newCategories[idx].id);
+          });
+          
+          for (const item of data.items) {
+            await dbAdd('items', {
+              name: item.name,
+              categoryId: catMap.get(item.categoryId),
+              outOfStock: item.outOfStock
+            });
+          }
+          
+          await dbSetSetting('lastBackup', Date.now());
+          await loadData();
+          renderCategories();
+          alert('Данные восстановлены!');
+        }
+      } catch (err) {
+        alert('Ошибка при восстановлении: ' + err.message);
       }
     };
-
-    try {
-      recognition.start();
-    } catch(e) {
-      showStatus('Не удалось запустить микрофон');
-      setTimeout(hideStatus, 2000);
-    }
-  }
-
-  function stopVoice() {
-    if (recognition) {
-      try { recognition.stop(); } catch(e) {}
-    }
-    isRecording = false;
-    voiceBtn.classList.remove('recording');
-    voiceBtn.textContent = '🎙';
-    vibrate(100);
-    beep(440, 200, 0.3);
-  }
-
-  addBtn.addEventListener('click', () => {
-    addTask();
-    launchKissBurst();
+    reader.readAsText(file);
+    e.target.value = '';
   });
 
-  voiceBtn.addEventListener('click', () => {
-    if (isRecording) stopVoice();
-    else startVoice(taskInput, (text) => addTask(text));
+  // === ОБРАБОТЧИКИ ===
+  document.getElementById('backBtn').addEventListener('click', closeCategory);
+  
+  document.getElementById('addItemBtn').addEventListener('click', addItem);
+  
+  document.getElementById('itemInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') addItem();
   });
-
-  taskInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') {
-      addTask();
-      launchKissBurst();
-    }
+  
+  document.getElementById('downloadBackupBtn').addEventListener('click', downloadBackup);
+  
+  document.getElementById('skipBackupBtn').addEventListener('click', () => {
+    document.getElementById('backupModal').classList.remove('show');
   });
+  
+  document.getElementById('restoreBtn').addEventListener('click', restoreBackup);
 
-  const addListBtn = document.getElementById('addListBtn');
-  const listsList = document.getElementById('listsList');
-  const listsOverview = document.getElementById('listsOverview');
-  const listDetail = document.getElementById('listDetail');
-  const listDetailTitle = document.getElementById('listDetailTitle');
-  const listDetailItems = document.getElementById('listDetailItems');
-  const backToLists = document.getElementById('backToLists');
-  const listItemInput = document.getElementById('listItemInput');
-  const addListItemBtn = document.getElementById('addListItemBtn');
-  const listVoiceBtn = document.getElementById('listVoiceBtn');
-
-  function saveLists() {
-    localStorage.setItem('priveLists', JSON.stringify(lists));
-    renderLists();
-  }
-
-  function renderLists() {
-    listsList.innerHTML = '';
-
-    if (lists.length === 0) {
-      listsList.innerHTML = '<li class="empty">Нет сохранённых списков</li>';
-    } else {
-      lists.forEach((list, idx) => {
-        const li = document.createElement('li');
-        li.className = 'list-card';
-        
-        const title = document.createElement('div');
-        title.className = 'list-card-title';
-        title.textContent = list.name;
-
-        const count = document.createElement('div');
-        count.className = 'list-card-count';
-        const doneCount = list.items.filter(i => i.done).length;
-        count.textContent = `${list.items.length} пунктов, выполнено: ${doneCount}`;
-
-        const del = document.createElement('button');
-        del.className = 'task-btn del';
-        del.textContent = '×';
-        del.style.position = 'absolute';
-        del.style.right = '10px';
-        del.style.top = '10px';
-        del.onclick = (e) => {
-          e.stopPropagation();
-          if (confirm('Удалить список "' + list.name + '"?')) {
-            lists.splice(idx, 1);
-            saveLists();
-          }
-        };
-
-        li.append(title, count, del);
-        li.onclick = () => openList(idx);
-        listsList.appendChild(li);
-      });
-    }
-  }
-
-  function openList(idx) {
-    currentListId = idx;
-    const list = lists[idx];
-    listDetailTitle.textContent = list.name;
-    listsOverview.style.display = 'none';
-    listDetail.classList.add('active');
-    renderListItems();
-  }
-
-  function closeList() {
-    currentListId = null;
-    listDetail.classList.remove('active');
-    listsOverview.style.display = 'block';
-    listItemInput.value = '';
-  }
-
-  function renderListItems() {
-    listDetailItems.innerHTML = '';
-    const list = lists[currentListId];
-
-    if (list.items.length === 0) {
-      listDetailItems.innerHTML = '<li class="empty">Список пуст. Добавь первый пункт</li>';
-    } else {
-      list.items.forEach((item, idx) => {
-        const li = document.createElement('li');
-        li.className = 'task' + (item.done ? ' done' : '');
-
-        const span = document.createElement('span');
-        span.className = 'task-text';
-        span.textContent = item.text;
-
-        const check = document.createElement('button');
-        check.className = 'task-btn';
-        check.textContent = item.done ? '↩' : '✓';
-        check.onclick = () => {
-          lists[currentListId].items[idx].done = !lists[currentListId].items[idx].done;
-          saveLists();
-          renderListItems();
-        };
-
-        const del = document.createElement('button');
-        del.className = 'task-btn del';
-        del.textContent = '×';
-        del.onclick = () => {
-          lists[currentListId].items.splice(idx, 1);
-          saveLists();
-          renderListItems();
-        };
-
-        li.append(span, check, del);
-        listDetailItems.appendChild(li);
-      });
-    }
-  }
-
-  function addListItem(text) {
-    const value = typeof text === 'string' ? text : listItemInput.value.trim();
-    if (!value || currentListId === null) return;
-
-    const items = value.split(/[,;]| и /).map(s => s.trim()).filter(s => s);
-    
-    items.forEach(item => {
-      lists[currentListId].items.push({
-        text: item,
-        done: false,
-        id: Date.now() + Math.random()
-      });
-    });
-
-    listItemInput.value = '';
-    saveLists();
-    renderListItems();
-  }
-
-  addListBtn.addEventListener('click', () => {
-    const name = prompt('Название списка:');
-    if (name && name.trim()) {
-      lists.push({
-        name: name.trim(),
-        items: [],
-        id: Date.now()
-      });
-      saveLists();
-      launchKissBurst();
-    }
-  });
-
-  backToLists.addEventListener('click', closeList);
-
-  addListItemBtn.addEventListener('click', () => addListItem());
-
-  listVoiceBtn.addEventListener('click', () => {
-    if (isRecording) stopVoice();
-    else startVoice(listItemInput, (text) => addListItem(text));
-  });
-
-  listItemInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') addListItem();
-  });
-
-  renderTasks();
-  renderLists();
+  // Запуск
+  init();
 </script>
 </body>
 </html>
